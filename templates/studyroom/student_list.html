@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load studyroom_filter %}
+{% block content %}
+
+<div class="container my-3">
+    <table class="table">
+        <thead>
+        <tr class="text-center thead-dark">
+            <th>번호</th>
+            <th>이름</th>
+            <th>학년</th>
+            <th>형제</th>
+            <th>계정</th>
+            <th>등록자</th>
+            <th style="width:25%">등록일시</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if student_list %}
+        {% for student in student_list %}
+        <tr class="text-center">
+            <td>
+                <!-- 번호 = 전체건수 - 시작인덱스 - 현재인덱스 + 1 -->
+                {{ student_list.paginator.count|sub:student_list.start_index|sub:forloop.counter0|add:1 }}
+            </td>
+            <td >
+                <a href="{% url 'studyroom:detail' student.id %}">{{ student.name }}</a>
+            </td>
+            <td>{{ student.grade }}</td>
+            <td>{{ student.brother.name }}</td>
+            <td>{{ student.account_set.all.first.id }}</td>
+            <td>{{ student.user.username }}</td>  <!-- 등록자 추가 -->
+            <td>{{ student.create_date }}</td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td colspan="3">학생이 없습니다.</td>
+        </tr>
+        {% endif %}
+        </tbody>
+    </table>
+    <!-- 페이징처리 시작 -->
+    <ul class="pagination justify-content-center">
+        <!-- 이전페이지 -->
+        {% if student_list.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ student_list.previous_page_number }}">이전</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+        </li>
+        {% endif %}
+        <!-- 페이지리스트 -->
+        {% for page_number in student_list.paginator.page_range %}
+        {% if page_number >= student_list.number|add:-5 and page_number <= student_list.number|add:5 %}
+            {% if page_number == student_list.number %}
+            <li class="page-item active" aria-current="page">
+                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+            {% endif %}
+        {% endif %}
+        {% endfor %}
+        <!-- 다음페이지 -->
+        {% if student_list.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ student_list.next_page_number }}">다음</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+        </li>
+        {% endif %}
+    </ul>
+    <!-- 페이징처리 끝 -->
+    <a href="{% url 'studyroom:student_create' %}" class="btn btn-primary">학생 등록하기</a>
+</div>
+{% endblock %}

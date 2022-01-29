@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container my-3">
+    <table class="table">
+        <thead>
+        <tr class="text-center thead-dark">
+            <th>항목</th>
+            <th>내용</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="text-center">
+            <td>이름</td>
+            <td>{{ student.name }}</td>
+        </tr>
+        <tr class="text-center">
+            <td>학년</td>
+            <td>{{ student.grade }}</td>
+        </tr>
+        <tr class="text-center">
+            <td>형제</td>
+            <td>{{ student.brother.name }}</td>
+        </tr>
+        <tr class="text-center">
+            <td>계정</td>
+            <td>{{ accounts.first.id }}</td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="my-3">
+        <a href="{% url 'studyroom:student_modify' student.id  %}"
+           class="btn btn-sm btn-outline-secondary">수정</a>
+        <a href="#" class="delete btn btn-sm btn-outline-secondary"
+            data-uri="{% url 'studyroom:student_delete' student.id  %}">삭제</a>
+    </div>
+    <form action="{% url 'studyroom:account_create' student.id %}" method="post" class="my-3">
+        {% csrf_token %}
+        {% if form.errors %}
+            <div class="alert alert-danger" role="alert">
+            {% for field in form %}
+                {% if field.errors %}
+                <strong>{{ field.label }}</strong>
+                {{ field.errors }}
+                {% endif %}
+            {% endfor %}
+            </div>
+        {% endif %}
+        {{ form.as_p }}
+        <input type="submit" value="계정등록" class="btn btn-primary">
+    </form>
+</div>
+{% endblock %}
+{% block script %}
+<script type='text/javascript'>
+$(document).ready(function(){
+    $(".delete").on('click', function() {
+        if(confirm("정말로 삭제하시겠습니까?")) {
+            location.href = $(this).data('uri');
+        }
+    });
+});
+</script>
+{% endblock %}
