@@ -6,9 +6,12 @@ from django.utils import timezone
 
 from ..forms import StudentForm, AccountForm
 from ..models import Student
+import logging
+logger = logging.getLogger('studyroom')
 
 
 def index(request):
+    logger.info("INFO 레벨로 출력")
     """
     학생 목록 출력
     """

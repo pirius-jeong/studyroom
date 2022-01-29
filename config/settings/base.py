@@ -188,5 +188,9 @@ LOGGING = {
             'level': 'INFO',
             'propagate': False,
         },
+        'studyroom': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+        },
     }
 }
