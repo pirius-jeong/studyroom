@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
-from studyroom import base_views
+from studyroom.views import base_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
