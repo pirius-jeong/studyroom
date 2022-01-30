@@ -10,6 +10,8 @@ urlpatterns = [
          base_views.index, name='index'),
     path('<int:student_id>/',
          base_views.detail, name='detail'),
+    path('sugang_table/',
+         base_views.sugang_table, name='sugang_table'),
 
     # student_views.py
     path('student/create/',

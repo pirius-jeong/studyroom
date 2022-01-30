@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load studyroom_filter %}
+{% block content %}
+
+<div>
+{% regroup sugang_list by class_id as class_list %}
+
+
+{% for class_id, time_list in class_list %}
+    <h1><span class="badge badge-secondary">{{ class_id }}</span></h1>
+    <table class="table">
+        <thead>
+        <tr class="text-center thead-dark">
+            <th>시간</th>
+            <th>월</th>
+            <th>화</th>
+            <th>수</th>
+            <th>목</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% regroup time_list by time as weekday_list %}
+        {% for time, sugangs in weekday_list %}
+        <tr class="text-center">
+            <td>{{ time }}시</td>
+            <td>
+                {% for sugang in sugangs %}
+                {% if sugang.weekday == 'MON' %}{{ sugang.student.name }}{% endif %}
+                {% endfor %}
+            </td>
+            <td>
+                {% for sugang in sugangs %}
+                {% if sugang.weekday == 'TUE' %}{{ sugang.student.name }}{% endif %}
+                {% endfor %}
+            </td>
+            <td>
+                {% for sugang in sugangs %}
+                {% if sugang.weekday == 'WED' %}{{ sugang.student.name }}{% endif %}
+                {% endfor %}
+            </td>
+            <td>
+                {% for sugang in sugangs %}
+                {% if sugang.weekday == 'THU' %}{{ sugang.student.name }}{% endif %}
+                {% endfor %}
+            </td>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endfor %}
+
+
+{% endblock %}

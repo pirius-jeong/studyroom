@@ -4,14 +4,14 @@ from django.contrib.auth.models import User
 
 class Student(models.Model):
     class Grade(models.TextChoices):
-        YEAR_6 = 'y6'
-        YEAR_7 = 'y7'
-        ELEMENTARY_1 = 'e1'
-        ELEMENTARY_2 = 'e2'
-        ELEMENTARY_3 = 'e3'
-        ELEMENTARY_4 = 'e4'
-        ELEMENTARY_5 = 'e5'
-        ELEMENTARY_6 = 'e6'
+        YEAR_6 = 'Y6'
+        YEAR_7 = 'Y7'
+        ELEMENTARY_1 = 'E1'
+        ELEMENTARY_2 = 'E2'
+        ELEMENTARY_3 = 'E3'
+        ELEMENTARY_4 = 'E4'
+        ELEMENTARY_5 = 'E5'
+        ELEMENTARY_6 = 'E6'
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     brother = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True)
@@ -37,18 +37,18 @@ class Account(models.Model):
 
 class PricePlan(models.Model):
     class Grade(models.TextChoices):
-        YEAR_6 = 'y6'
-        YEAR_7 = 'y7'
-        ELEMENTARY_1 = 'e1'
-        ELEMENTARY_2 = 'e2'
-        ELEMENTARY_3 = 'e3'
-        ELEMENTARY_4 = 'e4'
-        ELEMENTARY_5 = 'e5'
-        ELEMENTARY_6 = 'e6'
+        YEAR_6 = 'Y6'
+        YEAR_7 = 'Y7'
+        ELEMENTARY_1 = 'E1'
+        ELEMENTARY_2 = 'E2'
+        ELEMENTARY_3 = 'E3'
+        ELEMENTARY_4 = 'E4'
+        ELEMENTARY_5 = 'E5'
+        ELEMENTARY_6 = 'E6'
 
     class SugangType(models.TextChoices):
-        Day3 = 'd3'
-        Day4 = 'd4'
+        Day3 = 'D3'
+        Day4 = 'D4'
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     grade = models.CharField(max_length=2, choices=Grade.choices)
@@ -63,15 +63,15 @@ class PricePlan(models.Model):
 
 class Sugang(models.Model):
     class ClassId(models.TextChoices):
-        Mikyoung = 'c1'
-        Aekyoung = 'c2'
+        Mikyoung = 'MK'
+        Aekyoung = 'AK'
 
     class Weekday(models.TextChoices):
-        Monday = 'mon'
-        Tuesday = 'tue'
-        Wednesday = 'wed'
-        Thursday = 'thu'
-        Friday = 'fri'
+        Monday = 'MON'
+        Tuesday = 'TUE'
+        Wednesday = 'WED'
+        Thursday = 'THU'
+        Friday = 'FRI'
 
     class Time(models.TextChoices):
         One_Oclock = '1'
@@ -98,8 +98,8 @@ class Bill(models.Model):
         Partial_Payment = 'PP'
 
     class PayType(models.TextChoices):
-        KimpoPay = 'p1'
-        AccountTransfer = 'p2'
+        KimpoPay = 'KP'
+        AccountTransfer = 'AT'
 
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     bill_status = models.CharField(max_length=2, choices=BillStatus.choices)
@@ -119,8 +119,8 @@ class Bill(models.Model):
 
 class Pay(models.Model):
     class PayType(models.TextChoices):
-        KimpoPay = 'p1'
-        AccountTransfer = 'p2'
+        KimpoPay = 'KP'
+        AccountTransfer = 'AT'
 
     class PayStatus(models.TextChoices):
         Open = 'OP'

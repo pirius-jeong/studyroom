@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 
 from ..forms import StudentForm, AccountForm
-from ..models import Student
+from ..models import Student, Sugang
 import logging
 logger = logging.getLogger('studyroom')
 
@@ -39,74 +39,11 @@ def detail(request, student_id):
     return render(request, 'studyroom/student_detail.html', context)
 
 
-@login_required(login_url='common:login')
-def student_create(request):
+def sugang_table(request):
     """
-    학생 등록
+    수강표 출력
     """
-    if request.method == 'POST':
-        form = StudentForm(request.POST)
-        if form.is_valid():
-            student = form.save(commit=False)
-            student.user = request.user
-            student.create_date = timezone.now()
-            student.save()
-            return redirect('studyroom:index')
-    else:
-        form = StudentForm()
-    context = {'form': form}
-    return render(request, 'studyroom/student_form.html', context)
+    sugang_list = Sugang.objects.order_by('class_id','time')
+    context = {'sugang_list': sugang_list}
+    return render(request, 'studyroom/sugang.html', context)
 
-
-@login_required(login_url='common:login')
-def account_create(request, student_id):
-    """
-    계정 등록
-    """
-    student = get_object_or_404(Student, pk=student_id)
-    if request.method == "POST":
-        form = AccountForm(request.POST)
-        if form.is_valid():
-            account = form.save(commit=False)
-            account.user = request.user
-            account.create_date = timezone.now()
-            account.student = student
-            account.save()
-            return redirect('studyroom:detail', student_id=student.id)
-    else:
-        form = AccountForm()
-    context = {'student': student, 'form': form}
-    return render(request, 'studyroom/student_detail.html', context)
-
-
-@login_required(login_url='common:login')
-def student_modify(request, student_id):
-    """
-    pybo 질문수정
-    """
-    student = get_object_or_404(Student, pk=student_id)
-
-    if request.method == "POST":
-        form = StudentForm(request.POST, instance=student)
-        if form.is_valid():
-            student = form.save(commit=False)
-            student.modify_date = timezone.now()  # 수정일시 저장
-            student.save()
-            return redirect('studyroom:detail', student_id=student.id)
-    else:
-        form = StudentForm(instance=student)
-    context = {'form': form}
-    return render(request, 'studyroom/student_form.html', context)
-
-
-@login_required(login_url='common:login')
-def student_delete(request, student_id):
-    """
-    pybo 질문삭제
-    """
-    student = get_object_or_404(Student, pk=student_id)
-    if request.user != student.user:
-        messages.error(request, '삭제권한이 없습니다')
-        return redirect('studyroom:detail', student_id=student.id)
-    student.delete()
-    return redirect('studyroom:index')
