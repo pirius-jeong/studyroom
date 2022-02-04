@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import base_views, student_views, account_views
+from .views import base_views, student_views, account_views, bill_views
 
 app_name = 'studyroom'
 
@@ -24,4 +24,8 @@ urlpatterns = [
     # account_views.py
     path('account/create/<int:student_id>/',
          account_views.account_create, name='account_create'),
+
+    # bill_views.py
+    path('bill/',
+         bill_views.bill_list, name='bill_list'),
 ]

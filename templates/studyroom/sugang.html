@@ -2,7 +2,12 @@
 {% load studyroom_filter %}
 {% block content %}
 
-<div>
+<div class="container my-3">
+    <div>
+        <h1>
+            <span class="badge badge-secondary">수강표</span>
+        </h1>
+    </div>
 {% regroup sugang_list by class_id as class_list %}
 
 
@@ -47,6 +52,6 @@
         </tbody>
     </table>
 {% endfor %}
-
+</div>
 
 {% endblock %}

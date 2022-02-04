@@ -26,7 +26,7 @@
             <td >
                 <a href="{% url 'studyroom:detail' student.id %}">{{ student.name }}</a>
             </td>
-            <td>{{ student.grade }}</td>
+            <td>{{ student.get_grade_display }}</td>
             <td>{{ student.brother.name }}</td>
             <td>{{ student.account_set.all.first.id }}</td>
             <td>{{ student.user.username }}</td>  <!-- 등록자 추가 -->
