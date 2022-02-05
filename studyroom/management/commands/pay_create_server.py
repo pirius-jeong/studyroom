@@ -13,46 +13,49 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         chrome_options = Options()
-        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("headless")
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("lang=ko_KR")
+        chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko")
         driver = webdriver.Chrome("/home/ubuntu/venvs/mysite/lib/python3.8/site-packages/chromedriver_autoinstaller/98/chromedriver", chrome_options=chrome_options)
 
 
-        driver.implicitly_wait(5)
+        driver.implicitly_wait(30)
+        driver.set_window_position(0, 0)
+        driver.set_window_size(1920, 1080)
         driver.get('https://www.hometax.go.kr/')
         time.sleep(30)
 
         # 로그인 메뉴 이동
         driver.find_element(By.ID, 'textbox81212912').click()
-        time.sleep(10)
+        time.sleep(30)
 
         # 본문 iframe 이동
         iframe = driver.find_element(By.XPATH, '//*[@id="txppIframe"]')
         driver.switch_to.frame(iframe)
-        time.sleep(10)
+        time.sleep(30)
 
         # 아이디 로그인 탭 이동
         driver.find_element(By.XPATH, '//*[@id="group91882156"]').click()
-        time.sleep(3)
+        time.sleep(30)
 
         # 아이디/비번 입력
         driver.find_element(By.XPATH, '//*[@id="iptUserId"]').send_keys('alrudsim')
         driver.find_element(By.XPATH, '//*[@id="iptUserPw"]').send_keys('#smk445566')
         driver.find_element(By.XPATH, '//*[@id="anchor25"]').click()
-        time.sleep(5)
+        time.sleep(30)
 
         # 조회/발급 메뉴 이동
         driver.find_element(By.XPATH, '//*[@id="textbox81212923"]').click()
-        time.sleep(5)
+        time.sleep(30)
 
         # 현금영수증조회 > 매출내역 조회
         iframe = driver.find_element(By.XPATH, '//*[@id="txppIframe"]')
         driver.switch_to.frame(iframe)
         driver.find_element(By.XPATH, '//*[@id="sub_a_0105010000"]').click()
-        time.sleep(1)
-        driver.find_element(By.XPATH, '//*[@id="sub_a_0105010600"]').click()
         time.sleep(10)
+        driver.find_element(By.XPATH, '//*[@id="sub_a_0105010600"]').click()
+        time.sleep(30)
 
         # 일별 탭
         #driver.find_element(By.XPATH,'//*[@id="tabControl1_UTECRCB057_tab_tabs1"]/div[1]').click()
@@ -62,11 +65,11 @@ class Command(BaseCommand):
         #driver.find_element(By.XPATH,'//*[@id="tabControl1_UTECRCB057_tab_tabs3"]/div[1]').click()
         # 분기별 탭
         driver.find_element(By.XPATH,'//*[@id="tabControl1_UTECRCB057_tab_tabs4"]/div[1]').click()
-        time.sleep(1)
+        time.sleep(10)
 
         # 조회하기 클릭
         driver.find_element(By.XPATH, '//*[@id="group1988"]').click()
-        time.sleep(5)
+        time.sleep(20)
 
         table = driver.find_element(By.XPATH, '//*[@id="grdCshpt_body_table"]/tbody')
         rows = int(driver.find_element(By.XPATH, '//*[@id="txtTotal"]').text)
