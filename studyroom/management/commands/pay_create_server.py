@@ -15,7 +15,6 @@ class Command(BaseCommand):
         chrome_options = Options()
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--no-sandbox")
-        # 사용 언어
         chrome_options.add_argument("lang=ko_KR")
         driver = webdriver.Chrome("/home/ubuntu/venvs/mysite/lib/python3.8/site-packages/chromedriver_autoinstaller/98/chromedriver", chrome_options=chrome_options)
 
