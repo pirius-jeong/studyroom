@@ -53,9 +53,9 @@ class Command(BaseCommand):
         iframe = driver.find_element(By.XPATH, '//*[@id="txppIframe"]')
         driver.switch_to.frame(iframe)
         driver.find_element(By.XPATH, '//*[@id="sub_a_0105010000"]').click()
-        time.sleep(10)
-        driver.find_element(By.XPATH, '//*[@id="sub_a_0105010600"]').click()
         time.sleep(30)
+        driver.find_element(By.XPATH, '//*[@id="sub_a_0105010600"]').click()
+        time.sleep(40)
 
         # 일별 탭
         #driver.find_element(By.XPATH,'//*[@id="tabControl1_UTECRCB057_tab_tabs1"]/div[1]').click()
@@ -65,11 +65,11 @@ class Command(BaseCommand):
         #driver.find_element(By.XPATH,'//*[@id="tabControl1_UTECRCB057_tab_tabs3"]/div[1]').click()
         # 분기별 탭
         driver.find_element(By.XPATH,'//*[@id="tabControl1_UTECRCB057_tab_tabs4"]/div[1]').click()
-        time.sleep(10)
+        time.sleep(30)
 
         # 조회하기 클릭
         driver.find_element(By.XPATH, '//*[@id="group1988"]').click()
-        time.sleep(20)
+        time.sleep(30)
 
         table = driver.find_element(By.XPATH, '//*[@id="grdCshpt_body_table"]/tbody')
         rows = int(driver.find_element(By.XPATH, '//*[@id="txtTotal"]').text)
