@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 {% load studyroom_filter %}
+{% load humanize %}
 {% block content %}
 
 <div class="container my-3">
     <div>
         <h1>
-            <span class="badge badge-secondary">학생 목록</span>
+            <span class="badge badge-secondary">계정</span>
         </h1>
     </div>
     <table class="table">
@@ -20,39 +21,41 @@
             </tr>
         </tbody>
     </table>
+
+
     <table class="table">
         <thead>
         <tr class="text-center thead-dark">
             <th>번호</th>
             <th>이름</th>
-            <th>학년</th>
             <th>형제</th>
-            <th>계정</th>
-            <th>등록자</th>
-            <th style="width:25%">등록일시</th>
+            <th>납부자</th>
+            <th>납부자 전화번호</th>
+            <th>형제할인</th>
+            <th>추천할인(from)</th>
+            <th>추천할인(to)</th>
         </tr>
         </thead>
         <tbody>
-        {% if student_list %}
-        {% for student in student_list %}
+        {% if account_list %}
+        {% for account in account_list %}
         <tr class="text-center">
             <td>
                 <!-- 번호 = 전체건수 - 시작인덱스 - 현재인덱스 + 1 -->
-                {{ student_list.paginator.count|sub:student_list.start_index|sub:forloop.counter0|add:1 }}
+                {{ account_list.paginator.count|sub:account_list.start_index|sub:forloop.counter0|add:1 }}
             </td>
-            <td >
-                <a href="{% url 'studyroom:detail' student.id %}">{{ student.name }}</a>
-            </td>
-            <td>{{ student.get_grade_display }}</td>
-            <td>{{ student.brother.name }}</td>
-            <td>{{ student.account_set.all.first.id }}{{ student.brother.account_set.all.first.id }}</td>
-            <td>{{ student.user.username }}</td>  <!-- 등록자 추가 -->
-            <td>{{ student.create_date }}</td>
+            <td>{{ account.student.name }}</td>
+            <td>{{ account.student.brother.name }}</td>
+            <td>{{ account.payer }}</td>
+            <td>{{ account.payer_phone_num }}</td>
+            <td>{{ account.brother_dc_yn }}</td>
+            <td>{{ account.recommend_dc_start }}</td>
+            <td>{{ account.recommend_dc_end }}</td>
         </tr>
         {% endfor %}
         {% else %}
         <tr>
-            <td colspan="3">학생이 없습니다.</td>
+            <td colspan="3">account이 없습니다.</td>
         </tr>
         {% endif %}
         </tbody>
@@ -60,9 +63,9 @@
     <!-- 페이징처리 시작 -->
     <ul class="pagination justify-content-center">
         <!-- 이전페이지 -->
-        {% if student_list.has_previous %}
+        {% if account_list.has_previous %}
         <li class="page-item">
-            <a class="page-link" href="?page={{ student_list.previous_page_number }}">이전</a>
+            <a class="page-link" href="?page={{ account_list.previous_page_number }}">이전</a>
         </li>
         {% else %}
         <li class="page-item disabled">
@@ -70,9 +73,9 @@
         </li>
         {% endif %}
         <!-- 페이지리스트 -->
-        {% for page_number in student_list.paginator.page_range %}
-        {% if page_number >= student_list.number|add:-5 and page_number <= student_list.number|add:5 %}
-            {% if page_number == student_list.number %}
+        {% for page_number in account_list.paginator.page_range %}
+        {% if page_number >= account_list.number|add:-5 and page_number <= account_list.number|add:5 %}
+            {% if page_number == account_list.number %}
             <li class="page-item active" aria-current="page">
                 <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
             </li>
@@ -84,9 +87,9 @@
         {% endif %}
         {% endfor %}
         <!-- 다음페이지 -->
-        {% if student_list.has_next %}
+        {% if account_list.has_next %}
         <li class="page-item">
-            <a class="page-link" href="?page={{ student_list.next_page_number }}">다음</a>
+            <a class="page-link" href="?page={{ account_list.next_page_number }}">다음</a>
         </li>
         {% else %}
         <li class="page-item disabled">
@@ -95,9 +98,8 @@
         {% endif %}
     </ul>
     <!-- 페이징처리 끝 -->
-    <a href="{% url 'studyroom:student_create' %}" class="btn btn-primary">학생 등록하기</a>
 </div>
-<form id="searchForm" method="get" action="{% url 'studyroom:index' %}">
+<form id="searchForm" method="get" action="{% url 'studyroom:account_list' %}">
     <input type="hidden" id="name" name="name" value="{{ name|default_if_none:'' }}">
     <input type="hidden" id="page" name="page" value="{{ page }}">
 </form>
@@ -112,6 +114,7 @@ $(document).ready(function(){
 
     $("#btn_search").on('click', function() {
         $("#name").val($(".name").val());
+        $("#accountstatus").val($(".accountstatus").val());
         $("#page").val(1);  // 검색버튼을 클릭할 경우 1페이지부터 조회한다.
         $("#searchForm").submit();
     });

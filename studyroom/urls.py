@@ -22,6 +22,8 @@ urlpatterns = [
          student_views.student_delete, name='student_delete'),
     
     # account_views.py
+    path('account/',
+         account_views.account_list, name='account_list'),
     path('account/create/<int:student_id>/',
          account_views.account_create, name='account_create'),
 
