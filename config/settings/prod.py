@@ -1,10 +1,6 @@
 from .base import *
 
-# AWS
-#ALLOWED_HOSTS = ['3.36.1.220']
-
-# Virtualbox
-ALLOWED_HOSTS = ['10.0.2.15']
+ALLOWED_HOSTS = ['127.0.0.1','.pythonanywhere.com']
 STATIC_ROOT = BASE_DIR / 'static/'
 STATICFILES_DIRS = []
 DEBUG = False
