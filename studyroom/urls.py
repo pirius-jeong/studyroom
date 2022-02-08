@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import base_views, student_views, account_views, bill_views
+from .views import base_views, student_views, account_views, bill_views, sugang_views, pay_views
 
 app_name = 'studyroom'
 
@@ -10,8 +10,6 @@ urlpatterns = [
          base_views.index, name='index'),
     path('<int:student_id>/',
          base_views.detail, name='detail'),
-    path('sugang_table/',
-         base_views.sugang_table, name='sugang_table'),
 
     # student_views.py
     path('student/create/',
@@ -20,7 +18,17 @@ urlpatterns = [
          student_views.student_modify, name='student_modify'),
     path('student/delete/<int:student_id>/',
          student_views.student_delete, name='student_delete'),
-    
+
+    # sugang_views.py
+    path('sugang/',
+         sugang_views.sugang_list, name='sugang_list'),
+    path('sugang/create/<int:student_id>/',
+         sugang_views.sugang_create, name='sugang_create'),
+    path('sugang/modify/<int:sugang_id>/',
+         sugang_views.sugang_modify, name='sugang_modify'),
+    path('sugang/delete/<int:sugang_id>/',
+         sugang_views.sugang_delete, name='sugang_delete'),
+
     # account_views.py
     path('account/',
          account_views.account_list, name='account_list'),

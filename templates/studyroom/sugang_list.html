@@ -75,7 +75,7 @@
     <div>데이터가 없습니다.  </div>
 {% endif %}
 </div>
-<form id="searchForm" method="get" action="{% url 'studyroom:sugang_table' %}">
+<form id="searchForm" method="get" action="{% url 'studyroom:sugang_list' %}">
     <input type="hidden"  id="name" name="name" value="{{ name|default_if_none:'' }}">
     <input type="hidden"  id="sugang_mt" name="sugang_mt" value="{{ sugang_mt|default_if_none:'999912' }}">
 

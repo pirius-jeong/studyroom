@@ -4,6 +4,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.db.models import Q
+from datetime import datetime
 
 from ..forms import StudentForm, AccountForm
 from ..models import Student, Sugang
@@ -35,31 +36,14 @@ def index(request):
 
 def detail(request, student_id):
     """
-    학생 정보 출력
+    학생 상세정보(계정,수강) 출력
     """
+    work_mt = datetime.today().strftime("%Y%m")
     student = get_object_or_404(Student, pk=student_id)
-    context = {'student': student}
+    sugang_list = Sugang.objects.order_by('class_id', 'time').filter(student=student, start_mt__lte = work_mt)
+
+    context = {'student': student, 'sugang_list': sugang_list}
     return render(request, 'studyroom/student_detail.html', context)
 
 
-def sugang_table(request):
-    """
-    수강표 출력
-    """
-    name = request.GET.get('name', '')  # 검색어
-    sugang_mt = request.GET.get('sugang_mt', '')  # 검색어
-
-    sugang_list = Sugang.objects.order_by('class_id','time')
-
-    if name:
-        sugang_list = sugang_list.filter(
-            Q(student__name__icontains=name)
-        ).distinct()
-    if sugang_mt:
-        print(sugang_mt)
-        sugang_list = sugang_list.filter(
-            start_mt__lte = sugang_mt, end_mt__gte = sugang_mt
-        ).distinct()
-    context = {'sugang_list': sugang_list, 'name': name, 'sugang_mt': sugang_mt}
-    return render(request, 'studyroom/sugang.html', context)
 

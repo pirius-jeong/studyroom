@@ -1,5 +1,5 @@
 from django import forms
-from studyroom.models import Student, Account
+from studyroom.models import Student, Account, Sugang
 
 
 class StudentForm(forms.ModelForm):
@@ -28,4 +28,20 @@ class AccountForm(forms.ModelForm):
             'payer_phone_num': '납부자 폰번호',
             'recommend_dc_start' : '추천할인 시작월',
             'recommend_dc_end': '추천할인 종료월',
+        }
+
+
+class SugangForm(forms.ModelForm):
+    class Meta:
+        model = Sugang  # 사용할 모델
+        fields = ['student', 'class_id', 'weekday', 'time', 'start_mt', 'end_mt']
+        # SugangForm에서 사용할 Sugang 모델의 속성
+
+        labels = {
+            'student': '학생',
+            'class_id': '강사',
+            'weekday': '요일',
+            'time': '시간',
+            'start_mt': '시작월',
+            'end_mt': '종료월',
         }

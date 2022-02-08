@@ -9,7 +9,7 @@
     </div>
     <table class="table">
         <thead>
-        <tr class="text-center thead-dark">
+        <tr class="text-center thead-light">
             <th>학생</th>
             <th>학년</th>
             <th>형제</th>
@@ -27,8 +27,8 @@
     </table>
     <div class="my-3">
         <a href="{% url 'studyroom:student_modify' student.id  %}"
-           class="btn btn-primary">수정</a>
-        <a href="#" class="delete btn btn-primary"
+           class="btn btn-light">수정</a>
+        <a href="#" class="delete btn btn-light"
             data-uri="{% url 'studyroom:student_delete' student.id  %}">삭제</a>
     </div>
     <div>
@@ -39,7 +39,7 @@
     {% if  student.account_set.all.first.id %}
     <table class="table">
         <thead>
-        <tr class="text-center thead-dark">
+        <tr class="text-center thead-light">
             <th>계정번호</th>
             <th>학생</th>
             <th>형제</th>
@@ -65,14 +65,14 @@
     </table>
     <div class="my-3">
         <a href="{% url 'studyroom:account_modify' student.account_set.all.first.id  %}"
-           class="btn btn-primary">수정</a>
-        <a href="#" class="delete btn btn-primary"
+           class="btn btn-light">수정</a>
+        <a href="#" class="delete btn btn-light"
             data-uri="{% url 'studyroom:account_delete' student.account_set.all.first.id  %}">삭제</a>
     </div>
     {%  elif student.brother.account_set.all.first.id %}
     <table class="table">
         <thead>
-        <tr class="text-center thead-dark">
+        <tr class="text-center thead-light">
             <th>번호</th>
             <th>이름</th>
             <th>형제</th>
@@ -98,8 +98,8 @@
     </table>
     <div class="my-3">
         <a href="{% url 'studyroom:account_modify' student.brother.account_set.all.first.id  %}"
-           class="btn btn-primary">수정</a>
-        <a href="#" class="delete btn btn-primary"
+           class="btn btn-light">수정</a>
+        <a href="#" class="delete btn btn-light"
             data-uri="{% url 'studyroom:account_delete' student.brother.account_set.all.first.id  %}">삭제</a>
     </div>
     {% else %}
@@ -117,10 +117,69 @@
             </div>
         {% endif %}
         {{ form.as_p }}
-        <input type="submit" value="계정등록" class="btn btn-primary">
+        <input type="submit" value="계정 등록" class="btn btn-light">
     </form>
     {% endif %}
 
+    <div>
+        <h1>
+            <span class="badge badge-secondary">수강 정보</span>
+        </h1>
+    </div>
+    {% if sugang_list %}
+    {% regroup sugang_list by class_id as class_list %}
+    {% for class_id, time_list in class_list %}
+    <h3><span class="badge badge-secondary">{{ class_id }}</span></h3>
+    <table class="table">
+        <thead>
+        <tr class="text-center thead-light ">
+            <th>시간</th>
+            <th>월</th>
+            <th>화</th>
+            <th>수</th>
+            <th>목</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% regroup time_list by time as weekday_list %}
+        {% for time, sugangs in weekday_list %}
+        <tr class="text-center">
+            <td>{{ time }}시</td>
+            <td>
+                {% for sugang in sugangs %}
+                {% if sugang.weekday == 'MON' %}{{ sugang.start_mt }}{% endif %}
+                {% endfor %}
+            </td>
+            <td>
+                {% for sugang in sugangs %}
+                {% if sugang.weekday == 'TUE' %}{{ sugang.start_mt }}{% endif %}
+                {% endfor %}
+            </td>
+            <td>
+                {% for sugang in sugangs %}
+                {% if sugang.weekday == 'WED' %}{{ sugang.start_mt }}{% endif %}
+                {% endfor %}
+            </td>
+            <td>
+                {% for sugang in sugangs %}
+                {% if sugang.weekday == 'THU' %}{{ sugang.start_mt }}{% endif %}
+                {% endfor %}
+            </td>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endfor %}
+    <div class="my-3">
+        <a href="{% url 'studyroom:sugang_modify' student.sugang_set.all.first.id  %}"
+           class="btn btn-light">수정</a>
+        <a href="#" class="delete btn btn-light"
+            data-uri="{% url 'studyroom:sugang_delete' student.sugang_set.all.first.id  %}">삭제</a>
+    </div>
+    {% else %}
+    <div>데이터가 없습니다.  </div>
+    <a href="{% url 'studyroom:sugang_create' student.id %}" class="btn btn-light">수강 등록</a>
+
+    {% endif %}
 
 </div>
 {% endblock %}
