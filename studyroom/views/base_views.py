@@ -46,7 +46,20 @@ def sugang_table(request):
     """
     수강표 출력
     """
+    name = request.GET.get('name', '')  # 검색어
+    sugang_mt = request.GET.get('sugang_mt', '')  # 검색어
+
     sugang_list = Sugang.objects.order_by('class_id','time')
-    context = {'sugang_list': sugang_list}
+
+    if name:
+        sugang_list = sugang_list.filter(
+            Q(student__name__icontains=name)
+        ).distinct()
+    if sugang_mt:
+        print(sugang_mt)
+        sugang_list = sugang_list.filter(
+            start_mt__lte = sugang_mt, end_mt__gte = sugang_mt
+        ).distinct()
+    context = {'sugang_list': sugang_list, 'name': name, 'sugang_mt': sugang_mt}
     return render(request, 'studyroom/sugang.html', context)
 

@@ -26,6 +26,10 @@ urlpatterns = [
          account_views.account_list, name='account_list'),
     path('account/create/<int:student_id>/',
          account_views.account_create, name='account_create'),
+    path('account/modify/<int:account_id>/',
+         account_views.account_modify, name='account_modify'),
+    path('account/delete/<int:account_id>/',
+         account_views.account_delete, name='account_delete'),
 
     # bill_views.py
     path('bill/',

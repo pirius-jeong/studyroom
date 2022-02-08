@@ -54,3 +54,33 @@ def account_list(request):
 
     context = {'account_list': page_obj, 'page': page, 'name': name}
     return render(request, 'studyroom/account_list.html', context)
+
+@login_required(login_url='common:login')
+def account_modify(request, account_id):
+    """
+    pybo 질문수정
+    """
+    account = get_object_or_404(Account, pk=account_id)
+
+    if request.method == "POST":
+        form = AccountForm(request.POST, instance=account)
+        if form.is_valid():
+            account = form.save(commit=False)
+            account.modify_date = timezone.now()  # 수정일시 저장
+            account.save()
+            return redirect('studyroom:detail', student_id=account.student.id)
+    else:
+        form = AccountForm(instance=account)
+    context = {'form': form}
+    return render(request, 'studyroom/account_form.html', context)
+
+
+@login_required(login_url='common:login')
+def account_delete(request, account_id):
+    """
+    pybo 질문삭제
+    """
+    account = get_object_or_404(Account, pk=account_id)
+    student_id = account.student.id
+    account.delete()
+    return redirect('studyroom:detail', student_id=student_id)

@@ -13,6 +13,14 @@ class Student(models.Model):
         ('E5','5학년'),
         ('E6','6학년'),
     )
+
+    def __str__(self):
+        if self.brother:
+            template = '{0.name} {0.grade} {0.brother.name}'
+            return template.format(self)
+        template = '{0.name} {0.grade}'
+        return template.format(self)
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     brother = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=20)
@@ -23,6 +31,11 @@ class Student(models.Model):
 
 
 class Account(models.Model):
+    def __str__(self):
+        if self.student.brother:
+            return (self.student.name, self.student.brother.name)
+        return (self.student.name)
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     sub_student_id = models.IntegerField(null=True, blank=True)
@@ -50,6 +63,9 @@ class PricePlan(models.Model):
     class SugangType(models.TextChoices):
         Day3 = 'D3'
         Day4 = 'D4'
+
+    def __str__(self):
+        return (self.grade, self.sugang_type, self.start_mt, self.end_mt)
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     grade = models.CharField(max_length=2, choices=Grade_choices)
@@ -82,6 +98,9 @@ class Sugang(models.Model):
         ('4', '4시'),
         ('5', '5시'),
     )
+
+    def __str__(self):
+        return (self.student.name, self.class_id, self.weekday, self.time, self.start_mt, self.end_mt)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     class_id = models.CharField(max_length=2, choices=ClassId_choices)
@@ -103,6 +122,9 @@ class Bill(models.Model):
     class PayType(models.TextChoices):
         김포페이 = 'KP'
         계좌이체 = 'AT'
+
+    def __str__(self):
+        return (self.account.student.name, self.bill_mt)
 
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     bill_status = models.CharField(max_length=2, choices=BillStatus_choices)
@@ -131,6 +153,8 @@ class Pay(models.Model):
         등록 = 'OP'
         Close = 'CO'
 
+    def __str__(self):
+        return (self.pay_date, self.pay_type, self.pay_amt)
     pay_type = models.CharField(max_length=2, choices=PayType.choices)
     pay_date = models.CharField(max_length=14, default='yyyymmddhhmmss')
     pay_amt = models.IntegerField()

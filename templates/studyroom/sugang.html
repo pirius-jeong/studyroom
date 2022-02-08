@@ -8,14 +8,33 @@
             <span class="badge badge-secondary">수강표</span>
         </h1>
     </div>
+
+    <div class="row">
+        <div class="col-xs-2">
+            <button class="btn " type="button" >수강월</button>
+        </div>
+        <div class="col-xs-2">
+            <input type="text" class="form-control sugang_mt" value="{{ sugang_mt|default_if_none:'999912' }}">
+        </div>
+        <div class="col-xs-2">
+            <button class="btn " type="button" >학생</button>
+        </div>
+        <div class="col-xs-2">
+            <input id="input_search"  type="text" class="form-control name" value="{{ name|default_if_none:'' }}">
+        </div>
+
+        <div class="col-xs-2">
+            <button class="btn btn-outline-secondary" type="button" id="btn_search">찾기</button>
+        </div>
+
+    </div>
+{% if sugang_list %}
 {% regroup sugang_list by class_id as class_list %}
-
-
 {% for class_id, time_list in class_list %}
-    <h1><span class="badge badge-secondary">{{ class_id }}</span></h1>
+    <h3><span class="badge badge-secondary">{{ class_id }}</span></h3>
     <table class="table">
         <thead>
-        <tr class="text-center thead-dark">
+        <tr class="text-center thead-light ">
             <th>시간</th>
             <th>월</th>
             <th>화</th>
@@ -52,6 +71,31 @@
         </tbody>
     </table>
 {% endfor %}
+{% else %}
+    <div>데이터가 없습니다.  </div>
+{% endif %}
 </div>
+<form id="searchForm" method="get" action="{% url 'studyroom:sugang_table' %}">
+    <input type="hidden"  id="name" name="name" value="{{ name|default_if_none:'' }}">
+    <input type="hidden"  id="sugang_mt" name="sugang_mt" value="{{ sugang_mt|default_if_none:'999912' }}">
 
+</form>
+{% endblock %}
+{% block script %}
+<script type='text/javascript'>
+$(document).ready(function(){
+
+    $("#btn_search").on('click', function() {
+        $("#name").val($(".name").val());
+        $("#sugang_mt").val($(".sugang_mt").val());
+        $("#searchForm").submit();
+    });
+    $("#input_search").keydown(function(key) {
+        if (key.keyCode == 13) {
+            $("#name").val($(".name").val());
+            $("#sugang_mt").val($(".sugang_mt").val());
+            $("#searchForm").submit();
+    }});
+});
+</script>
 {% endblock %}

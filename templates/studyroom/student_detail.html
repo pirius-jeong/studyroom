@@ -10,10 +10,10 @@
     <table class="table">
         <thead>
         <tr class="text-center thead-dark">
-            <th>이름</th>
+            <th>학생</th>
             <th>학년</th>
             <th>형제</th>
-            <th>계정</th>
+            <th>계정번호</th>
         </tr>
         </thead>
         <tbody>
@@ -27,8 +27,8 @@
     </table>
     <div class="my-3">
         <a href="{% url 'studyroom:student_modify' student.id  %}"
-           class="btn btn-sm btn-outline-secondary">수정</a>
-        <a href="#" class="delete btn btn-sm btn-outline-secondary"
+           class="btn btn-primary">수정</a>
+        <a href="#" class="delete btn btn-primary"
             data-uri="{% url 'studyroom:student_delete' student.id  %}">삭제</a>
     </div>
     <div>
@@ -40,8 +40,8 @@
     <table class="table">
         <thead>
         <tr class="text-center thead-dark">
-            <th>번호</th>
-            <th>이름</th>
+            <th>계정번호</th>
+            <th>학생</th>
             <th>형제</th>
             <th>납부자</th>
             <th>납부자 전화번호</th>
@@ -54,15 +54,21 @@
         <tr class="text-center">
             <td>{{ student.account_set.all.first.id }}</td>
             <td>{{ student.account_set.all.first.student.name }}</td>
-            <td>{{ student.account_set.all.first.student.brother.name }}</td>
-            <td>{{ student.account_set.all.first.payer }}</td>
-            <td>{{ student.account_set.all.first.payer_phone_num }}</td>
+            <td>{{ student.account_set.all.first.student.brother.name|default_if_none:"미등록" }}</td>
+            <td>{{ student.account_set.all.first.payer|default_if_none:"미등록" }}</td>
+            <td>{{ student.account_set.all.first.payer_phone_num|default_if_none:"미등록" }}</td>
             <td>{{ student.account_set.all.first.brother_dc_yn }}</td>
-            <td>{{ student.account_set.all.first.recommend_dc_start }}</td>
-            <td>{{ student.account_set.all.first.recommend_dc_end }}</td>
+            <td>{{ student.account_set.all.first.recommend_dc_start|default_if_none:"" }}</td>
+            <td>{{ student.account_set.all.first.recommend_dc_end|default_if_none:"" }}</td>
         </tr>
         </tbody>
     </table>
+    <div class="my-3">
+        <a href="{% url 'studyroom:account_modify' student.account_set.all.first.id  %}"
+           class="btn btn-primary">수정</a>
+        <a href="#" class="delete btn btn-primary"
+            data-uri="{% url 'studyroom:account_delete' student.account_set.all.first.id  %}">삭제</a>
+    </div>
     {%  elif student.brother.account_set.all.first.id %}
     <table class="table">
         <thead>
@@ -82,17 +88,22 @@
             <td>{{ student.brother.account_set.all.first.id }}</td>
             <td>{{ student.brother.account_set.all.first.student.name }}</td>
             <td>{{ student.brother.account_set.all.first.student.brother.name }}</td>
-            <td>{{ student.brother.account_set.all.first.payer }}</td>
-            <td>{{ student.brother.account_set.all.first.payer_phone_num }}</td>
+            <td>{{ student.brother.account_set.all.first.payer|default_if_none:"미등록"  }}</td>
+            <td>{{ student.brother.account_set.all.first.payer_phone_num|default_if_none:"미등록"  }}</td>
             <td>{{ student.brother.account_set.all.first.brother_dc_yn }}</td>
-            <td>{{ student.brother.account_set.all.first.recommend_dc_start }}</td>
-            <td>{{ student.brother.account_set.all.first.recommend_dc_end }}</td>
+            <td>{{ student.brother.account_set.all.first.recommend_dc_start|default_if_none:""  }}</td>
+            <td>{{ student.brother.account_set.all.first.recommend_dc_end|default_if_none:""  }}</td>
         </tr>
         </tbody>
     </table>
+    <div class="my-3">
+        <a href="{% url 'studyroom:account_modify' student.brother.account_set.all.first.id  %}"
+           class="btn btn-primary">수정</a>
+        <a href="#" class="delete btn btn-primary"
+            data-uri="{% url 'studyroom:account_delete' student.brother.account_set.all.first.id  %}">삭제</a>
+    </div>
     {% else %}
     <h5>등록된 계정이 없습니다.</h5>
-    {% endif %}
     <form action="{% url 'studyroom:account_create' student.id %}" method="post" class="my-3">
         {% csrf_token %}
         {% if form.errors %}
@@ -108,6 +119,9 @@
         {{ form.as_p }}
         <input type="submit" value="계정등록" class="btn btn-primary">
     </form>
+    {% endif %}
+
+
 </div>
 {% endblock %}
 {% block script %}
