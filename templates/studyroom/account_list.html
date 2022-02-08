@@ -44,13 +44,13 @@
                 <!-- 번호 = 전체건수 - 시작인덱스 - 현재인덱스 + 1 -->
                 {{ account_list.paginator.count|sub:account_list.start_index|sub:forloop.counter0|add:1 }}
             </td>
-            <td>{{ account.student.name }}</td>
+            <td><a href="{% url 'studyroom:account_modify' account.id %}">{{ account.student.name }}</td>
             <td>{{ account.student.brother.name }}</td>
-            <td>{{ account.payer }}</td>
-            <td>{{ account.payer_phone_num }}</td>
+            <td>{{ account.payer|default_if_none:"미등록" }}</td>
+            <td>{{ account.payer_phone_num|default_if_none:"미등록" }}</td>
             <td>{{ account.brother_dc_yn }}</td>
-            <td>{{ account.recommend_dc_start }}</td>
-            <td>{{ account.recommend_dc_end }}</td>
+            <td>{{ account.recommend_dc_start|default_if_none:"" }}</td>
+            <td>{{ account.recommend_dc_end|default_if_none:"" }}</td>
         </tr>
         {% endfor %}
         {% else %}

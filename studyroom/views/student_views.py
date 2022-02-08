@@ -53,8 +53,5 @@ def student_delete(request, student_id):
     pybo 질문삭제
     """
     student = get_object_or_404(Student, pk=student_id)
-    if request.user != student.user:
-        messages.error(request, '삭제권한이 없습니다')
-        return redirect('studyroom:detail', student_id=student.id)
     student.delete()
     return redirect('studyroom:index')
