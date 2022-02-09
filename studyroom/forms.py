@@ -1,5 +1,5 @@
 from django import forms
-from studyroom.models import Student, Account, Sugang
+from studyroom.models import Student, Account, Sugang, Absence
 
 
 class StudentForm(forms.ModelForm):
@@ -44,4 +44,17 @@ class SugangForm(forms.ModelForm):
             'time': '시간',
             'start_mt': '시작월',
             'end_mt': '종료월',
+        }
+
+
+class AbsenceForm(forms.ModelForm):
+    class Meta:
+        model = Absence  # 사용할 모델
+        fields = ['student', 'absence_dt', 'absence_detail']
+        # SugangForm에서 사용할 Sugang 모델의 속성
+
+        labels = {
+            'student': '학생',
+            'absence_dt': '결석일',
+            'absence_detail': '결석사유',
         }

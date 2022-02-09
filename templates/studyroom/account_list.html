@@ -6,26 +6,24 @@
 <div class="container my-3">
     <div>
         <h1>
-            <span class="badge badge-secondary">계정</span>
+            <span class="badge badge-info">계정</span>
         </h1>
     </div>
-    <table class="table">
-        <tbody>
-            <tr>
-                <td>
-                    <input id="input_search" type="text" class="form-control name" value="{{ name|default_if_none:'' }}">
-                </td>
-                <td>
-                    <button class="btn btn-outline-secondary" type="button" id="btn_search">찾기</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
+    <div class="row">
+        <div class="col-xs-2">
+            <button class="btn " type="button" >이름</button>
+        </div>
+        <div class="col-xs-2">
+            <input id="input_search" type="text" class="form-control name" value="{{ name|default_if_none:'' }}">
+        </div>
+        <div>
+            <button class="btn btn-outline-secondary" type="button" id="btn_search">찾기</button>
+        </div>
+    </div>
 
     <table class="table">
         <thead>
-        <tr class="text-center thead-dark">
+        <tr class="text-center thead-light">
             <th>번호</th>
             <th>이름</th>
             <th>형제</th>

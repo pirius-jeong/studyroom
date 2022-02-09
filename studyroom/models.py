@@ -169,7 +169,7 @@ class Absence(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     absence_dt = models.CharField(max_length=8, default='yyyymmdd')
-    absence_detail = models.TextField(default='결석사유:')
+    absence_detail = models.CharField(max_length=60,default='결석사유:')
     create_date = models.DateTimeField()
     modify_date = models.DateTimeField(auto_now=True)
 

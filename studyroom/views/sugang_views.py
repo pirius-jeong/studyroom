@@ -56,8 +56,6 @@ def sugang_create(request, student_id):
 
         return redirect('studyroom:detail', student_id=student.id)
     else:
-
-    # context에 student 추가
         context = {'student': student, 'crud': 'create'}
         return render(request, 'studyroom/sugang_form.html', context)
 

@@ -4,7 +4,7 @@
 <div class="container my-3">
     <div>
         <h1>
-            <span class="badge badge-secondary">학생 정보</span>
+            <span class="badge badge-info">학생 정보</span>
         </h1>
     </div>
     <table class="table">
@@ -27,19 +27,21 @@
     </table>
     <div class="my-3">
         <a href="{% url 'studyroom:student_modify' student.id  %}"
-           class="btn btn-light">수정</a>
-        <a href="#" class="delete btn btn-light"
+           class="btn btn-secondary">수정</a>
+        <a href="#" class="delete btn btn-secondary"
             data-uri="{% url 'studyroom:student_delete' student.id  %}">삭제</a>
     </div>
-    <div>
+
+    <hr class="my-3">
+    <div class="my-3">
         <h1>
-            <span class="badge badge-secondary">계정 정보</span>
+            <span class="badge badge-info">계정 정보</span>
         </h1>
     </div>
     {% if  student.account_set.all.first.id %}
     <table class="table">
         <thead>
-        <tr class="text-center thead-light">
+        <tr class="text-center thead-secondary">
             <th>계정번호</th>
             <th>학생</th>
             <th>형제</th>
@@ -65,14 +67,14 @@
     </table>
     <div class="my-3">
         <a href="{% url 'studyroom:account_modify' student.account_set.all.first.id  %}"
-           class="btn btn-light">수정</a>
-        <a href="#" class="delete btn btn-light"
+           class="btn btn-secondary">수정</a>
+        <a href="#" class="delete btn btn-secondary"
             data-uri="{% url 'studyroom:account_delete' student.account_set.all.first.id  %}">삭제</a>
     </div>
     {%  elif student.brother.account_set.all.first.id %}
     <table class="table">
         <thead>
-        <tr class="text-center thead-light">
+        <tr class="text-center thead-secondary">
             <th>번호</th>
             <th>이름</th>
             <th>형제</th>
@@ -98,8 +100,8 @@
     </table>
     <div class="my-3">
         <a href="{% url 'studyroom:account_modify' student.brother.account_set.all.first.id  %}"
-           class="btn btn-light">수정</a>
-        <a href="#" class="delete btn btn-light"
+           class="btn btn-secondary">수정</a>
+        <a href="#" class="delete btn btn-secondary"
             data-uri="{% url 'studyroom:account_delete' student.brother.account_set.all.first.id  %}">삭제</a>
     </div>
     {% else %}
@@ -117,22 +119,23 @@
             </div>
         {% endif %}
         {{ form.as_p }}
-        <input type="submit" value="계정 등록" class="btn btn-light">
+        <input type="submit" value="계정 등록" class="btn btn-secondary">
     </form>
     {% endif %}
 
-    <div>
+    <hr class="my-3">
+    <div class="my-3">
         <h1>
-            <span class="badge badge-secondary">수강 정보</span>
+            <span class="badge badge-info">수강 정보</span>
         </h1>
     </div>
     {% if sugang_list %}
     {% regroup sugang_list by class_id as class_list %}
     {% for class_id, time_list in class_list %}
-    <h3><span class="badge badge-secondary">{{ class_id }}</span></h3>
+    <h3><span class="badge badge-info">{{ class_id }}</span></h3>
     <table class="table">
         <thead>
-        <tr class="text-center thead-light ">
+        <tr class="text-center thead-secondary ">
             <th>시간</th>
             <th>월</th>
             <th>화</th>
@@ -171,20 +174,52 @@
     {% endfor %}
     <div class="my-3">
         <a href="{% url 'studyroom:sugang_modify' student.id  %}"
-           class="btn btn-light">수정</a>
+           class="btn btn-secondary">수정</a>
     </div>
     {% else %}
-    <div>데이터가 없습니다.  </div>
-    <a href="{% url 'studyroom:sugang_create' student.id %}" class="btn btn-light">수강 등록</a>
+    <div>
+        <h5>데이터가 없습니다.</h5>
+    </div>
+    <a href="{% url 'studyroom:sugang_create' student.id %}" class="btn btn-secondary">수강 등록</a>
 
     {% endif %}
+    <hr class="my-3">
+    <div class="my-3">
+        <h1>
+            <span class="badge badge-info">결석 정보</span>
+        </h1>
+    </div>
+    {% if student.absence_set.all %}
+    <div >
+        {% for absence in student.absence_set.all %}
+            <div>
+                <h5>
+                    {{ absence.absence_dt }}
+                    <a href="#" class="absence_delete btn btn-secondary"
+            data-uri="{% url 'studyroom:absence_delete' absence.id  %}">삭제</a>
+                </h5>
+            </div>
+        {% endfor %}
+    </div>
+        <a href="{% url 'studyroom:absence_create' student.id %}" class="btn btn-secondary">결석 등록</a>
 
+    {% else %}
+    <div>
+        <h5>데이터가 없습니다.</h5>
+    </div>
+    <a href="{% url 'studyroom:absence_create' student.id %}" class="btn btn-secondary">결석 등록</a>
+    {% endif %}
 </div>
 {% endblock %}
 {% block script %}
 <script type='text/javascript'>
 $(document).ready(function(){
     $(".delete").on('click', function() {
+        if(confirm("정말로 삭제하시겠습니까?")) {
+            location.href = $(this).data('uri');
+        }
+    });
+    $(".absence_delete").on('click', function() {
         if(confirm("정말로 삭제하시겠습니까?")) {
             location.href = $(this).data('uri');
         }
