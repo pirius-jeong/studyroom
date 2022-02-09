@@ -8,22 +8,142 @@
         </h1>
     </div>
 
-    <form method="post" class="post-form my-3">
+    {% if crud == 'create' %}
+    <form method="post" class="post-form my-3" action="{% url 'studyroom:sugang_create' student.id %}">
+
         {% csrf_token %}
-        <!-- 오류표시 Start -->
-        {% if form.errors %}
-            <div class="alert alert-danger" role="alert">
-            {% for field in form %}
-                {% if field.errors %}
-                <strong>{{ field.label }}</strong>
-                {{ field.errors }}
-                {% endif %}
-            {% endfor %}
-            </div>
-        {% endif %}
-        <!-- 오류표시 End -->
-        {{ form.as_p }}
+
+
+        <p><label>학  생 : </label>  <input type="text" name="student" value={{student.name}} maxlength="6"></p>
+        <p><label>시작월 : </label>  <input type="text" name="start_mt" value="yyyymm" maxlength="6" ></p>
+        <p><label>종료월 : </label>  <input type="text" name="end_mt" value="999912" maxlength="6" ></p>
+
+
+        <table class="table">
+        <thead>
+        <tr class="text-center thead-light ">
+            <th>
+                <select name="class_id">
+                    <option value="" selected>---------</option>
+                    <option value="MK">심미경</option>
+                    <option value="AK">심애경</option>
+                </select>
+            </th>
+            <th>월</th>
+            <th>화</th>
+            <th>수</th>
+            <th>목</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="text-center">
+            <td>1시</td>
+            <td><input type="checkbox" name="weekday_time" value="MON_1"></td>
+            <td><input type="checkbox" name="weekday_time" value="TUE_1"></td>
+            <td><input type="checkbox" name="weekday_time" value="WED_1"></td>
+            <td><input type="checkbox" name="weekday_time" value="THU_1"></td>
+        </tr>
+        <tr class="text-center">
+            <td>2시</td>
+            <td><input type="checkbox" name="weekday_time" value="MON_2"></td>
+            <td><input type="checkbox" name="weekday_time" value="TUE_2"></td>
+            <td><input type="checkbox" name="weekday_time" value="WED_2"></td>
+            <td><input type="checkbox" name="weekday_time" value="THU_2"></td>
+        </tr>
+        <tr class="text-center">
+            <td>3시</td>
+            <td><input type="checkbox" name="weekday_time" value="MON_3"></td>
+            <td><input type="checkbox" name="weekday_time" value="TUE_3"></td>
+            <td><input type="checkbox" name="weekday_time" value="WED_3"></td>
+            <td><input type="checkbox" name="weekday_time" value="THU_3"></td>
+        </tr>
+        <tr class="text-center">
+            <td>4시</td>
+            <td><input type="checkbox" name="weekday_time" value="MON_4"></td>
+            <td><input type="checkbox" name="weekday_time" value="TUE_4"></td>
+            <td><input type="checkbox" name="weekday_time" value="WED_4"></td>
+            <td><input type="checkbox" name="weekday_time" value="THU_4"></td>
+        </tr>
+        <tr class="text-center">
+            <td>5시</td>
+            <td><input type="checkbox" name="weekday_time" value="MON_5"></td>
+            <td><input type="checkbox" name="weekday_time" value="TUE_5"></td>
+            <td><input type="checkbox" name="weekday_time" value="WED_5"></td>
+            <td><input type="checkbox" name="weekday_time" value="THU_5"></td>
+        </tr>
+        </tbody>
+    </table>
         <button type="submit" class="btn btn-primary">저장하기</button>
     </form>
+    {% elif crud == 'modify' %}
+    <form method="post" class="post-form my-3" action="{% url 'studyroom:sugang_modify' student.id %}">
+
+        {% csrf_token %}
+
+
+        <p><label>학  생 : </label>  <input type="text" name="student" value={{student.name}} maxlength="6"></p>
+        <p><label>시작월 : </label>  <input type="text" name="start_mt" value="yyyymm" maxlength="6"></p>
+        <p><label>종료월 : </label>  <input type="text" name="end_mt" value="999912" maxlength="6"></p>
+
+
+        <table class="table">
+        <thead>
+        <tr class="text-center thead-light ">
+            <th>
+                <select name="class_id">
+                    <option value="" selected>---------</option>
+                    <option value="MK">심미경</option>
+                    <option value="AK">심애경</option>
+                </select>
+            </th>
+            <th>월</th>
+            <th>화</th>
+            <th>수</th>
+            <th>목</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="text-center">
+            <td>1시</td>
+            <td><input type="checkbox" name="weekday_time" value="MON_1"></td>
+            <td><input type="checkbox" name="weekday_time" value="TUE_1"></td>
+            <td><input type="checkbox" name="weekday_time" value="WED_1"></td>
+            <td><input type="checkbox" name="weekday_time" value="THU_1"></td>
+        </tr>
+        <tr class="text-center">
+            <td>2시</td>
+            <td><input type="checkbox" name="weekday_time" value="MON_2"></td>
+            <td><input type="checkbox" name="weekday_time" value="TUE_2"></td>
+            <td><input type="checkbox" name="weekday_time" value="WED_2"></td>
+            <td><input type="checkbox" name="weekday_time" value="THU_2"></td>
+        </tr>
+        <tr class="text-center">
+            <td>3시</td>
+            <td><input type="checkbox" name="weekday_time" value="MON_3"></td>
+            <td><input type="checkbox" name="weekday_time" value="TUE_3"></td>
+            <td><input type="checkbox" name="weekday_time" value="WED_3"></td>
+            <td><input type="checkbox" name="weekday_time" value="THU_3"></td>
+        </tr>
+        <tr class="text-center">
+            <td>4시</td>
+            <td><input type="checkbox" name="weekday_time" value="MON_4"></td>
+            <td><input type="checkbox" name="weekday_time" value="TUE_4"></td>
+            <td><input type="checkbox" name="weekday_time" value="WED_4"></td>
+            <td><input type="checkbox" name="weekday_time" value="THU_4"></td>
+        </tr>
+        <tr class="text-center">
+            <td>5시</td>
+            <td><input type="checkbox" name="weekday_time" value="MON_5"></td>
+            <td><input type="checkbox" name="weekday_time" value="TUE_5"></td>
+            <td><input type="checkbox" name="weekday_time" value="WED_5"></td>
+            <td><input type="checkbox" name="weekday_time" value="THU_5"></td>
+        </tr>
+        </tbody>
+    </table>
+        <button type="submit" class="btn btn-primary">저장하기</button>
+    </form>
+
+
+    {% endif %}
 </div>
 {% endblock %}

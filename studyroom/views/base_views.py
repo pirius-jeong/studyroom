@@ -1,12 +1,7 @@
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
-from django.utils import timezone
 from django.db.models import Q
 from datetime import datetime
-
-from ..forms import StudentForm, AccountForm
 from ..models import Student, Sugang
 
 
@@ -40,10 +35,7 @@ def detail(request, student_id):
     """
     work_mt = datetime.today().strftime("%Y%m")
     student = get_object_or_404(Student, pk=student_id)
-    sugang_list = Sugang.objects.order_by('class_id', 'time').filter(student=student, start_mt__lte = work_mt)
+    sugang_list = Sugang.objects.order_by('class_id', 'time').filter(student=student, end_mt__gte = work_mt)
 
     context = {'student': student, 'sugang_list': sugang_list}
     return render(request, 'studyroom/student_detail.html', context)
-
-
-

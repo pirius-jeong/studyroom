@@ -170,10 +170,8 @@
     </table>
     {% endfor %}
     <div class="my-3">
-        <a href="{% url 'studyroom:sugang_modify' student.sugang_set.all.first.id  %}"
+        <a href="{% url 'studyroom:sugang_modify' student.id  %}"
            class="btn btn-light">수정</a>
-        <a href="#" class="delete btn btn-light"
-            data-uri="{% url 'studyroom:sugang_delete' student.sugang_set.all.first.id  %}">삭제</a>
     </div>
     {% else %}
     <div>데이터가 없습니다.  </div>

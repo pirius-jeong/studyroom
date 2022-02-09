@@ -1,10 +1,9 @@
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 from django.db.models import Q
-from ..forms import StudentForm, AccountForm, SugangForm
 from ..models import Student, Sugang
 
 
@@ -15,7 +14,7 @@ def sugang_list(request):
     name = request.GET.get('name', '')  # 검색어
     sugang_mt = request.GET.get('sugang_mt', '')  # 검색어
 
-    sugang_list = Sugang.objects.order_by('class_id','time')
+    sugang_list = Sugang.objects.order_by('class_id', 'time')
 
     if name:
         sugang_list = sugang_list.filter(
@@ -32,50 +31,77 @@ def sugang_list(request):
 @login_required(login_url='common:login')
 def sugang_create(request, student_id):
     """
-    학생 등록
+    수강 등록
     """
     student = get_object_or_404(Student, pk=student_id)
+
     if request.method == 'POST':
-        form = SugangForm(request.POST)
-        if form.is_valid():
-            sugang = form.save(commit=False)
+        weekday_time = request.POST.getlist('weekday_time')
+        class_id = request.POST.getlist('class_id')[0]
+        start_mt = request.POST.getlist('start_mt')[0]
+        end_mt = request.POST.getlist('end_mt')[0]
+        user = request.user
+        for i in weekday_time:
+            sugang = Sugang()
             sugang.student = student
-            sugang.user = request.user
+            sugang.class_id = class_id
+            sugang.start_mt = start_mt
+            sugang.end_mt = end_mt
+            sugang.weekday = i.split('_')[0]
+            sugang.time = i.split('_')[1]
+            sugang.user = user
             sugang.create_date = timezone.now()
+            #print(sugang.student.name, sugang.class_id, sugang.start_mt, sugang.end_mt, sugang.weekday, sugang.time, sugang.user, sugang.create_date  )
             sugang.save()
-            return redirect('studyroom:sugang')
+
+        return redirect('studyroom:detail', student_id=student.id)
     else:
-        form = SugangForm()
-    context = {'form': form}
-    return render(request, 'studyroom/student_detail.html', context)
+
+    # context에 student 추가
+        context = {'student': student, 'crud': 'create'}
+        return render(request, 'studyroom/sugang_form.html', context)
 
 
 @login_required(login_url='common:login')
 def sugang_modify(request, student_id):
     """
-    pybo 질문수정
+    수강 변경
     """
     student = get_object_or_404(Student, pk=student_id)
-    sugang = Sugang.objects.get().filter(student=student)
-    if request.method == "POST":
-        form = SugangForm(request.POST, instance=sugang)
-        if form.is_valid():
-            sugang = form.save(commit=False)
-            sugang.modify_date = timezone.now()  # 수정일시 저장
+
+    if request.method == 'POST':
+        print('==== sugang_modify ====')
+        weekday_time = request.POST.getlist('weekday_time')
+        class_id = request.POST.getlist('class_id')[0]
+        start_mt = request.POST.getlist('start_mt')[0]
+        end_mt = request.POST.getlist('end_mt')[0]
+        user = request.user
+
+        old_sugang_list = Sugang.objects.filter(student=student, end_mt='999912')
+        for old_sugang in old_sugang_list:
+            start_mt_date = datetime(int(start_mt[:4]), int(start_mt[-2:]), 1)
+            old_sugang.end_mt = (start_mt_date + relativedelta(months=-1)).strftime("%Y%m")
+            print('old : ',old_sugang.start_mt, old_sugang.end_mt, old_sugang.weekday, old_sugang.time)
+            old_sugang.modify_date = timezone.now()
+            old_sugang.save()
+
+        for i in weekday_time:
+            sugang = Sugang()
+            sugang.student = student
+            sugang.class_id = class_id
+            sugang.start_mt = start_mt
+            sugang.end_mt = end_mt
+            sugang.weekday = i.split('_')[0]
+            sugang.time = i.split('_')[1]
+            sugang.user = user
+            sugang.create_date = timezone.now()
+            print('new:', sugang.student.name, sugang.class_id, sugang.start_mt, sugang.end_mt, sugang.weekday, sugang.time, sugang.user, sugang.create_date  )
             sugang.save()
-            return redirect('studyroom:detail', student_id=student.id)
+        return redirect('studyroom:detail', student_id=student.id)
     else:
-        form = SugangForm(instance=sugang)
-    context = {'form': form}
-    return render(request, 'studyroom/sugang_form.html', context)
+
+        # context에 student 추가
+        context = {'student': student, 'crud': 'modify'}
+        return render(request, 'studyroom/sugang_form.html', context)
 
 
-@login_required(login_url='common:login')
-def sugang_delete(request, student_id):
-    """
-    pybo 질문삭제
-    """
-    student = get_object_or_404(Student, pk=student_id)
-    #sugang =
-    #sugang.delete()
-    return redirect('studyroom:index')
