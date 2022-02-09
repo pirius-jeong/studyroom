@@ -26,8 +26,7 @@ urlpatterns = [
          sugang_views.sugang_create, name='sugang_create'),
     path('sugang/modify/<int:student_id>/',
          sugang_views.sugang_modify, name='sugang_modify'),
-    path('sugang/delete/<int:sugang_id>/',
-         sugang_views.sugang_delete, name='sugang_delete'),
+ 
 
     # account_views.py
     path('account/',
