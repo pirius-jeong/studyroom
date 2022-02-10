@@ -1,80 +1,52 @@
 {% extends 'base.html' %}
 {% load studyroom_filter %}
-{% load humanize %}
 {% block content %}
 
 <div class="container my-3">
     <div>
         <h1>
-            <span class="badge badge-secondary">청구내역</span>
+            <span class="badge badge-info">수납 목록</span>
         </h1>
     </div>
-    <table class="table">
-        <tbody>
-            <tr>
-                <td>
-                    <select name='bill_mt' class="form-control billmt" value="{{ billmt|default_if_none:'' }}">
-                        {% if billmt %}
-                        <option value=billmt selected>--   {{ billmt }}   --</option>
-                        {% else %}
-                        <option value='' selected>--   청구월   --</option>
-                        {% endif %}
-                        <option value='202202'>22년 2월</option>
-                        <option value='202203'>22년 3월</option>
-                        <option value='202204'>22년 4월</option>
-                    </select>
-                </td>
-                <td>
-                    <select name='bill_status' class="form-control billstatus" value="{{ billstatus|default_if_none:'' }}">
-                      <option value='' selected>--   상태   --</option>
-                      <option value='OP'>발행</option>
-                      <option value='FP'>완납</option>
-                      <option value='PP'>부분납</option>
-                    </select>
-                </td>
-                <td>
-                    <button class="btn btn-outline-secondary" type="button" id="btn_search">찾기</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-
+    <div class="row">
+        <div class="col-xs-2">
+            <button class="btn " type="button" >이름</button>
+        </div>
+        <div class="col-xs-2">
+            <input id="input_search" type="text" class="form-control name" value="{{ name|default_if_none:'' }}">
+        </div>
+        <div class="col-xs-2">
+            <button class="btn btn-outline-secondary" type="button" id="btn_search">찾기</button>
+        </div>
+        <div class="col-xs-2">
+        </div>        
+    </div>
     <table class="table">
         <thead>
-        <tr class="text-center thead-dark">
-            <th>번호</th>
-            <th>이름</th>
-            <th>청구월</th>
-            <th>청구금액</th>
-            <th>수강료</th>
-            <th>환불금액</th>
-            <th>형제할인</th>
-            <th>추천할인</th>
+        <tr class="text-center thead-light">
+            <th>수납일</th>
+            <th>구분</th>
+            <th>납부자</th>
+            <th>학생</th>
+            <th>수납금액</th>
             <th>상태</th>
         </tr>
         </thead>
         <tbody>
-        {% if bill_list %}
-        {% for bill in bill_list %}
+        {% if pay_list %}
+        {% for pay in pay_list %}
         <tr class="text-center">
-            <td>
-                <!-- 번호 = 전체건수 - 시작인덱스 - 현재인덱스 + 1 -->
-                {{ bill_list.paginator.count|sub:bill_list.start_index|sub:forloop.counter0|add:1 }}
-            </td>
-            <td>{{ bill.account.student.name }} {{ bill.account.student.brother.name }}</td>
-            <td>{{ bill.bill_mt }}</td>
-            <td>{{ bill.bill_amt|intcomma }}</td>
-            <td>{{ bill.base_amt|intcomma }} {% if bill.account.student.brother %}{{ bill.brother_base_amt|intcomma }}{% endif %}</td>
-            <td>{{ bill.refund_amt|intcomma }} {% if bill.account.student.brother %}{{ bill.brother_refund_amt|intcomma }}{% endif %}</td>
-            <td>{{ bill.brother_dc_amt|intcomma }}</td>
-            <td>{{ bill.recommend_dc_amt|intcomma }}</td>
-            <td>{{ bill.get_bill_status_display }}</td>
+            <td>{{ pay.pay_date }}</td>
+            <td>{{ pay.pay_type }}</td>
+            <td>{{ pay.payer }}</td>
+            <td>{{ pay.account.student.name }}</td>
+            <td>{{ pay.pay_amt }}</td>
+            <td>{{ pay.pay_status }}</td>
         </tr>
         {% endfor %}
         {% else %}
         <tr>
-            <td colspan="3">bill이 없습니다.</td>
+            <td colspan="3">수납 내역이 없습니다.</td>
         </tr>
         {% endif %}
         </tbody>
@@ -82,9 +54,9 @@
     <!-- 페이징처리 시작 -->
     <ul class="pagination justify-content-center">
         <!-- 이전페이지 -->
-        {% if bill_list.has_previous %}
+        {% if pay_list.has_previous %}
         <li class="page-item">
-            <a class="page-link" href="?page={{ bill_list.previous_page_number }}">이전</a>
+            <a class="page-link" href="?page={{ pay_list.previous_page_number }}">이전</a>
         </li>
         {% else %}
         <li class="page-item disabled">
@@ -92,9 +64,9 @@
         </li>
         {% endif %}
         <!-- 페이지리스트 -->
-        {% for page_number in bill_list.paginator.page_range %}
-        {% if page_number >= bill_list.number|add:-5 and page_number <= bill_list.number|add:5 %}
-            {% if page_number == bill_list.number %}
+        {% for page_number in pay_list.paginator.page_range %}
+        {% if page_number >= pay_list.number|add:-5 and page_number <= pay_list.number|add:5 %}
+            {% if page_number == pay_list.number %}
             <li class="page-item active" aria-current="page">
                 <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
             </li>
@@ -106,9 +78,9 @@
         {% endif %}
         {% endfor %}
         <!-- 다음페이지 -->
-        {% if bill_list.has_next %}
+        {% if pay_list.has_next %}
         <li class="page-item">
-            <a class="page-link" href="?page={{ bill_list.next_page_number }}">다음</a>
+            <a class="page-link" href="?page={{ pay_list.next_page_number }}">다음</a>
         </li>
         {% else %}
         <li class="page-item disabled">
@@ -117,10 +89,10 @@
         {% endif %}
     </ul>
     <!-- 페이징처리 끝 -->
+
 </div>
-<form id="searchForm" method="get" action="{% url 'studyroom:bill_list' %}">
-    <input type="hidden" id="billmt" name="billmt" value="{{ billmt|default_if_none:'' }}">
-    <input type="hidden" id="billstatus" name="billstatus" value="{{ billstatus|default_if_none:'' }}">
+<form id="searchForm" method="get" action="{% url 'studyroom:pay_list' %}">
+    <input type="hidden" id="name" name="name" value="{{ name|default_if_none:'' }}">
     <input type="hidden" id="page" name="page" value="{{ page }}">
 </form>
 {% endblock %}
@@ -133,11 +105,16 @@ $(document).ready(function(){
     });
 
     $("#btn_search").on('click', function() {
-        $("#billmt").val($(".billmt").val());
-        $("#billstatus").val($(".billstatus").val());
+        $("#name").val($(".name").val());
         $("#page").val(1);  // 검색버튼을 클릭할 경우 1페이지부터 조회한다.
         $("#searchForm").submit();
     });
+    $("#input_search").keydown(function(key) {
+        if (key.keyCode == 13) {
+            $("#name").val($(".name").val());
+            $("#page").val(1);  // 검색버튼을 클릭할 경우 1페이지부터 조회한다.
+            $("#searchForm").submit();
+    }});
 });
 </script>
 {% endblock %}
