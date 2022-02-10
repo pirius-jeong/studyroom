@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'django_crontab',
 ]
 
 MIDDLEWARE = [
@@ -186,7 +185,3 @@ LOGGING = {
         },
     }
 }
-
-CRONJOBS = [
-    ('*/10 * * * *','django.core.management.call_command',['pay_create_server'],{4},'>> /home/kizacademy/log/pay_create.log'),
-]
