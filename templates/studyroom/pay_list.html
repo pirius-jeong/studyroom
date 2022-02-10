@@ -37,11 +37,11 @@
         {% for pay in pay_list %}
         <tr class="text-center">
             <td>{{ pay.pay_date }}</td>
-            <td>{{ pay.pay_type }}</td>
+            <td>{{ pay.get_pay_type_display }}</td>
             <td>{{ pay.payer }}</td>
             <td>{{ pay.account.student.name }}</td>
             <td>{{ pay.pay_amt }}</td>
-            <td>{{ pay.pay_status }}</td>
+            <td>{{ pay.get_pay_status_display }}</td>
         </tr>
         {% endfor %}
         {% else %}
