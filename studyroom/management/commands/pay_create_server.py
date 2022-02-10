@@ -9,9 +9,16 @@ from selenium.webdriver.common.by import By
 import time
 
 class Command(BaseCommand):
-    help = 'test'
+    help = 'pay create from hometax for kimpopay'
+
+    def add_arguments(self, parser):
+        parser.add_argument('tab',
+                            nargs=1,
+                            type=int,
+                            help='탭 선택(1:일별, 2:주별, 3:월별, 4:분기별)')
 
     def handle(self, *args, **options):
+        tab = options['tab'][0]
         chrome_options = Options()
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--no-sandbox")
@@ -57,14 +64,18 @@ class Command(BaseCommand):
         driver.find_element(By.XPATH, '//*[@id="sub_a_0105010600"]').click()
         time.sleep(40)
 
-        # 일별 탭
-        #driver.find_element(By.XPATH,'//*[@id="tabControl1_UTECRCB057_tab_tabs1"]/div[1]').click()
-        # 주별 탭
-        #driver.find_element(By.XPATH, '//*[@id="tabControl1_UTECRCB057_tab_tabs2"]/div[1]').click()
-        # 월별 탭
-        #driver.find_element(By.XPATH,'//*[@id="tabControl1_UTECRCB057_tab_tabs3"]/div[1]').click()
-        print('# 분기별 탭')
-        driver.find_element(By.XPATH,'//*[@id="tabControl1_UTECRCB057_tab_tabs4"]/div[1]').click()
+        if tab == 1:
+            # 일별 탭
+            driver.find_element(By.XPATH,'//*[@id="tabControl1_UTECRCB057_tab_tabs1"]/div[1]').click()
+        elif tab == 2:
+            # 주별 탭
+            driver.find_element(By.XPATH, '//*[@id="tabControl1_UTECRCB057_tab_tabs2"]/div[1]').click()
+        elif tab == 3:
+            # 월별 탭
+            driver.find_element(By.XPATH,'//*[@id="tabControl1_UTECRCB057_tab_tabs3"]/div[1]').click()
+        elif tab == 4:
+            # 분기별 탭
+            driver.find_element(By.XPATH,'//*[@id="tabControl1_UTECRCB057_tab_tabs4"]/div[1]').click()
         time.sleep(30)
 
         print('# 조회하기 클릭')
