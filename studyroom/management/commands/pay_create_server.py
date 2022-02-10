@@ -35,16 +35,16 @@ class Command(BaseCommand):
 
         print('# 로그인 메뉴 이동')
         driver.find_element(By.ID, 'textbox81212912').click()
-        time.sleep(40)
+        time.sleep(60)
 
         print('# 본문 iframe 이동')
         iframe = driver.find_element(By.XPATH, '//*[@id="txppIframe"]')
         driver.switch_to.frame(iframe)
-        time.sleep(40)
+        time.sleep(60)
 
         print('# 아이디 로그인 탭 이동')
         driver.find_element(By.XPATH, '//*[@id="group91882156"]').click()
-        time.sleep(40)
+        time.sleep(60)
 
         print('# 아이디/비번 입력')
         driver.find_element(By.XPATH, '//*[@id="iptUserId"]').send_keys('alrudsim')
