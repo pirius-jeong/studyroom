@@ -2,10 +2,6 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 
 import sqlite3
-import pandas as pd
-from pandas import Series, DataFrame
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
 
 from studyroom.models import Bill, Account, Pay
 
@@ -65,9 +61,9 @@ class Command(BaseCommand):
         # 주별 탭
         #driver.find_element(By.XPATH, '//*[@id="tabControl1_UTECRCB057_tab_tabs2"]/div[1]').click()
         # 월별 탭
-        #driver.find_element(By.XPATH,'//*[@id="tabControl1_UTECRCB057_tab_tabs3"]/div[1]').click()
+        driver.find_element(By.XPATH,'//*[@id="tabControl1_UTECRCB057_tab_tabs3"]/div[1]').click()
         # 분기별 탭
-        driver.find_element(By.XPATH,'//*[@id="tabControl1_UTECRCB057_tab_tabs4"]/div[1]').click()
+        #driver.find_element(By.XPATH,'//*[@id="tabControl1_UTECRCB057_tab_tabs4"]/div[1]').click()
         time.sleep(1)
 
         # 조회하기 클릭
