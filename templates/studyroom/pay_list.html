@@ -40,7 +40,7 @@
             <td>{{ pay.get_pay_type_display }}</td>
             <td>{{ pay.payer }}</td>
             <td>{{ pay.account.student.name }}</td>
-            <td>{{ pay.pay_amt }}</td>
+            <td>{{ pay.pay_amt|intcomma }}</td>
             <td>{{ pay.get_pay_status_display }}</td>
         </tr>
         {% endfor %}
