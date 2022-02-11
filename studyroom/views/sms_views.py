@@ -1,59 +1,29 @@
-from django.urls import path
+from django.core.paginator import Paginator
+from django.shortcuts import render
+from django.db.models import Q
 
-from .views import base_views, student_views, account_views, bill_views,\
-                    sugang_views, pay_views, absence_views, sms_views
+from ..models import Sms
+import logging
+logger = logging.getLogger('studyroom')
 
-app_name = 'studyroom'
+def sms_list(request):
+    logger.info("INFO 레벨로 출력")
+    """
+    SMS 목록 출력
+    """
+    # 입력 파라미터
+    page = request.GET.get('page', '1')  # 페이지
+    name = request.GET.get('name', '')  # 검색어
 
-urlpatterns = [
-    # base_views.py
-    path('',
-         base_views.index, name='index'),
-    path('<int:student_id>/',
-         base_views.detail, name='detail'),
+    # 조회
+    sms_list = Sms.objects.order_by('-requestTime')
+    if name:
+        sms_list = sms_list.filter(
+            Q(account__student__name__icontains=name)   # 학생이름검색
+        ).distinct()
+    # 페이징처리
+    paginator = Paginator(sms_list, 10)  # 페이지당 10개씩 보여주기
+    page_obj = paginator.get_page(page)
 
-    # student_views.py
-    path('student/create/',
-         student_views.student_create, name='student_create'),
-    path('student/modify/<int:student_id>/',
-         student_views.student_modify, name='student_modify'),
-    path('student/delete/<int:student_id>/',
-         student_views.student_delete, name='student_delete'),
-
-    # sugang_views.py
-    path('sugang/',
-         sugang_views.sugang_list, name='sugang_list'),
-    path('sugang/create/<int:student_id>/',
-         sugang_views.sugang_create, name='sugang_create'),
-    path('sugang/modify/<int:student_id>/',
-         sugang_views.sugang_modify, name='sugang_modify'),
-
-
-    # account_views.py
-    path('account/',
-         account_views.account_list, name='account_list'),
-    path('account/create/<int:student_id>/',
-         account_views.account_create, name='account_create'),
-    path('account/modify/<int:account_id>/',
-         account_views.account_modify, name='account_modify'),
-    path('account/delete/<int:account_id>/',
-         account_views.account_delete, name='account_delete'),
-
-    # absence_views.py
-    path('absence/create/<int:student_id>/',
-         absence_views.absence_create, name='absence_create'),
-    path('absence/delete/<int:absence_id>/',
-         absence_views.absence_delete, name='absence_delete'),
-
-    # bill_views.py
-    path('bill/',
-         bill_views.bill_list, name='bill_list'),
-    
-    # pay_views.py
-    path('pay/',
-         pay_views.pay_list, name='pay_list'),
-
-    # sms_views.py
-    path('sms/',
-         sms_views.sms_list, name='sms_list'),
-]
+    context = {'sms_list': page_obj, 'page': page, 'name': name}
+    return render(request, 'studyroom/sms_list.html', context)
