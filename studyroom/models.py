@@ -174,3 +174,25 @@ class Absence(models.Model):
     create_date = models.DateTimeField()
     modify_date = models.DateTimeField(auto_now=True)
 
+class Sms(models.Model):
+    statusCode_choices = (
+        ('200', 'OK'),
+        ('202', 'Accept'),
+        ('400', 'Bad Request'),
+        ('401', 'Unauthorized'),
+        ('403', 'Forbidden'),
+        ('404', 'Not Found'),
+        ('429', 'Too Many Requests'),
+        ('500', 'Internal Server Error'),
+    )
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    smstype = models.CharField(max_length=3)
+    to = models.CharField(max_length=11)
+    subject = models.CharField(max_length=50, null=True, blank=True)
+    content = models.TextField(max_length=2000)
+    requestId = models.CharField(max_length=32, null=True, blank=True)
+    requestTime = models.CharField(max_length=50, null=True, blank=True)
+    statusCode = models.CharField(max_length=3, null=True, blank=True, choices=statusCode_choices)
+    statusName = models.CharField(max_length=10, null=True, blank=True)
+    messageId = models.CharField(max_length=23, null=True, blank=True)
+    create_date = models.DateTimeField()
