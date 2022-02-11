@@ -17,15 +17,15 @@ class StudentForm(forms.ModelForm):
 class AccountForm(forms.ModelForm):
     class Meta:
         model = Account  # 사용할 모델
-        fields = ['student', 'sub_student_id', 'brother_dc_yn', 'payer', 'payer_phone_num', 'recommend_dc_start', 'recommend_dc_end' ]
+        fields = ['student', 'brother_dc_yn', 'payer', 'payer_phone_num', 'sms_phone_num', 'recommend_dc_start', 'recommend_dc_end' ]
         # AccountForm에서 사용할 Account 모델의 속성
 
         labels = {
             'student': '학생',
-            'sub_student_id': '형제학생id',
             'brother_dc_yn': '형제할인 여부',
             'payer': '납부자',
             'payer_phone_num': '납부자 폰번호',
+            'sms_phone_num': 'SMS 폰번호',
             'recommend_dc_start' : '추천할인 시작월',
             'recommend_dc_end': '추천할인 종료월',
         }

@@ -38,7 +38,6 @@ class Account(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    sub_student_id = models.IntegerField(null=True, blank=True)
     payer = models.CharField(max_length=40, null=True, blank=True)
     payer_phone_num = models.CharField(max_length=11, null=True, blank=True)
     sms_phone_num = models.CharField(max_length=11, null=True, blank=True)
