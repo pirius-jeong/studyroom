@@ -1,37 +1,118 @@
-<!-- 네비게이션바 -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-    <a class="navbar-brand" href="{% url 'studyroom:index' %}">키즈아카데미 공부방</a>
-    <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse flex-grow-0" id="navbarNav">
-        <ul class="navbar-nav">
-            <li class="nav-item ">
-                {% if user.is_authenticated %}
-                <a class="nav-link" href="{% url 'common:logout' %}">{{ user.username }} (로그아웃)</a>
-                {% else %}
-                <a class="nav-link" href="{% url 'common:login' %}">로그인</a>
-                {% endif %}
-            </li>
-            <li class="nav-item ">
-                <a class="nav-link" href="{% url 'studyroom:index' %}">학생</a>
-            </li>
-            <li class="nav-item ">
-                <a class="nav-link" href="{% url 'studyroom:account_list' %}">계정</a>
-            </li>
-            <li class="nav-item ">
-                <a class="nav-link" href="{% url 'studyroom:sugang_list' %}">수강표</a>
-            </li>
-            <li class="nav-item ">
-                <a class="nav-link" href="{% url 'studyroom:bill_list' %}">청구</a>
-            </li>
-            <li class="nav-item ">
-                <a class="nav-link" href="{% url 'studyroom:pay_list' %}">수납</a>
-            </li>
-            <li class="nav-item ">
-                <a class="nav-link" href="{% url 'studyroom:sms_list' %}">SMS</a>
-            </li>
-        </ul>
+{% extends 'base.html' %}
+{% load studyroom_filter %}
+{% block content %}
+
+<div class="container my-3">
+    <div>
+        <h1>
+            <span class="badge badge-info">SMS 발송내역</span>
+        </h1>
     </div>
-</nav>
+    <div class="row">
+        <div class="col-xs-2">
+            <button class="btn " type="button" >이름</button>
+        </div>
+        <div class="col-xs-2">
+            <input id="input_search" type="text" class="form-control name" value="{{ name|default_if_none:'' }}">
+        </div>
+        <div class="col-xs-2">
+            <button class="btn btn-outline-secondary" type="button" id="btn_search">찾기</button>
+        </div>
+        <div class="col-xs-2">
+        </div>        
+    </div>
+    <table class="table">
+        <thead>
+        <tr class="text-center thead-light">
+            <th>이름</th>
+            <th>폰번호</th>
+            <th>발송일시</th>
+            <th>상태</th>
+            <th>내용</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if sms_list %}
+        {% for sms in sms_list %}
+        <tr class="text-center">
+            <td>{{ sms.account.student.name }}</td>
+            <td>{{ sms.to }}</td>
+            <td>{{ sms.requestTime }}</td>
+            <td>{{ sms.statusName }}</td>
+            <td>{{ sms.content }}</td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td colspan="3">sms 발송내역이 없습니다.</td>
+        </tr>
+        {% endif %}
+        </tbody>
+    </table>
+    <!-- 페이징처리 시작 -->
+    <ul class="pagination justify-content-center">
+        <!-- 이전페이지 -->
+        {% if sms_list.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ sms_list.previous_page_number }}">이전</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+        </li>
+        {% endif %}
+        <!-- 페이지리스트 -->
+        {% for page_number in sms_list.paginator.page_range %}
+        {% if page_number >= sms_list.number|add:-5 and page_number <= sms_list.number|add:5 %}
+            {% if page_number == sms_list.number %}
+            <li class="page-item active" aria-current="page">
+                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+            {% endif %}
+        {% endif %}
+        {% endfor %}
+        <!-- 다음페이지 -->
+        {% if sms_list.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ sms_list.next_page_number }}">다음</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+        </li>
+        {% endif %}
+    </ul>
+    <!-- 페이징처리 끝 -->
+
+</div>
+<form id="searchForm" method="get" action="{% url 'studyroom:sms_list' %}">
+    <input type="hidden" id="name" name="name" value="{{ name|default_if_none:'' }}">
+    <input type="hidden" id="page" name="page" value="{{ page }}">
+</form>
+{% endblock %}
+{% block script %}
+<script type='text/javascript'>
+$(document).ready(function(){
+    $(".page-link").on('click', function() {
+        $("#page").val($(this).data("page"));
+        $("#searchForm").submit();
+    });
+
+    $("#btn_search").on('click', function() {
+        $("#name").val($(".name").val());
+        $("#page").val(1);  // 검색버튼을 클릭할 경우 1페이지부터 조회한다.
+        $("#searchForm").submit();
+    });
+    $("#input_search").keydown(function(key) {
+        if (key.keyCode == 13) {
+            $("#name").val($(".name").val());
+            $("#page").val(1);  // 검색버튼을 클릭할 경우 1페이지부터 조회한다.
+            $("#searchForm").submit();
+    }});
+});
+</script>
+{% endblock %}
