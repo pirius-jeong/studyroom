@@ -1,6 +1,7 @@
 from django.urls import path
 
-from .views import base_views, student_views, account_views, bill_views, sugang_views, pay_views, absence_views
+from .views import base_views, student_views, account_views, bill_views,\
+                    sugang_views, pay_views, absence_views, sms_views
 
 app_name = 'studyroom'
 
@@ -51,5 +52,8 @@ urlpatterns = [
     # pay_views.py
     path('pay/',
          pay_views.pay_list, name='pay_list'),
-    
+
+    # sms_views.py
+    path('sms/',
+         sms_views.sms_list, name='sms_list'),
 ]
