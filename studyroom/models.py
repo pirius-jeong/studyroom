@@ -41,6 +41,7 @@ class Account(models.Model):
     sub_student_id = models.IntegerField(null=True, blank=True)
     payer = models.CharField(max_length=40, null=True, blank=True)
     payer_phone_num = models.CharField(max_length=11, null=True, blank=True)
+    sms_phone_num = models.CharField(max_length=11, null=True, blank=True)
     brother_dc_yn = models.CharField(max_length=1, default='n')
     recommend_dc_start = models.CharField(max_length=6, null=True, blank=True, default='yyyymm')
     recommend_dc_end = models.CharField(max_length=6, null=True, blank=True, default='yyyymm')
