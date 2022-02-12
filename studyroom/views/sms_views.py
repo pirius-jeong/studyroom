@@ -30,6 +30,13 @@ def sms_list(request):
     page = request.GET.get('page', '1')  # 페이지
     name = request.GET.get('name', '')  # 검색어
 
+    # messageStatus != 'COMPLETE 재처리
+    sms_list = Sms.objects.exclude(messageStatus = 'COMPLETE')
+    for sms in sms_list:
+        res = get_request('GET', 'messageId', sms.messageId, '')
+        sms.messageStatus = res['data']['messages'][0]['status']
+        sms.save()
+
     # 조회
     sms_list = Sms.objects.order_by('-requestTime')
     if name:
@@ -99,22 +106,6 @@ def get_request(request_type, key, value, data=''):
     print('=== response.txt : ', response.text)
 
     return {'status_code':response.status_code, 'data':json.loads(response.text)}
-
-def get_messageId(requestId):
-    # sms 발송 요청 조회
-    timestamp = str(int(time.time() * 1000))
-    request_type = 'GET'
-    response = requests.get(
-        sms_url, params={'requestId': requestId},
-        headers={"x-ncp-apigw-timestamp": timestamp,
-                 "x-ncp-iam-access-key": acc_key_id,
-                 "x-ncp-apigw-signature-v2": get_signature(request_type, timestamp)
-                 }
-    )
-    print('=== request : ', response.url)
-    print('=== response.status_code : ', response.status_code)
-    data = json.loads(response.text)
-    print('=== response.txt : ', response.text)
 
 
 @login_required(login_url='common:login')
