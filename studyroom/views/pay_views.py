@@ -18,7 +18,7 @@ def pay_list(request):
     name = request.GET.get('name', '')  # 검색어
 
     # 조회
-    pay_list = Pay.objects.order_by('id')
+    pay_list = Pay.objects.order_by('-id')
     if name:
         pay_list = pay_list.filter(
             Q(account__student__name__icontains=name)   # 학생이름검색

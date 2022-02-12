@@ -31,7 +31,7 @@ def sms_list(request):
     name = request.GET.get('name', '')  # 검색어
 
     # messageStatus != 'COMPLETE 재처리
-    sms_list = Sms.objects.exclude(messageStatus = 'COMPLETE')
+    sms_list = Sms.objects.exclude(messageStatus = 'COMPLETED')
     for sms in sms_list:
         res = get_request('GET', 'messageId', sms.messageId, '')
         sms.messageStatus = res['data']['messages'][0]['status']
