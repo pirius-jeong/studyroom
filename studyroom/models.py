@@ -194,4 +194,6 @@ class Sms(models.Model):
     statusCode = models.CharField(max_length=3, null=True, blank=True, choices=statusCode_choices)
     statusName = models.CharField(max_length=10, null=True, blank=True)
     messageId = models.CharField(max_length=23, null=True, blank=True)
+    messageStatus = models.CharField(max_length=15, null=True, blank=True)
     create_date = models.DateTimeField()
+

@@ -1,10 +1,11 @@
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from datetime import datetime
 from ..models import Student, Sugang
 
-
+@login_required(login_url='common:login')
 def index(request):
     """
     학생 목록 출력
@@ -28,7 +29,7 @@ def index(request):
     context = {'student_list': page_obj, 'page': page, 'name': name}
     return render(request, 'studyroom/student_list.html', context)
 
-
+@login_required(login_url='common:login')
 def detail(request, student_id):
     """
     학생 상세정보(계정,수강) 출력

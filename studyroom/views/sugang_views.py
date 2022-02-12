@@ -6,7 +6,7 @@ from dateutil.relativedelta import relativedelta
 from django.db.models import Q
 from ..models import Student, Sugang
 
-
+@login_required(login_url='common:login')
 def sugang_list(request):
     """
     수강표 출력

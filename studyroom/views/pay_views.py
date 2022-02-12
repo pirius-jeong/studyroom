@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.db.models import Q
@@ -6,6 +7,7 @@ from ..models import Pay
 import logging
 logger = logging.getLogger('studyroom')
 
+@login_required(login_url='common:login')
 def pay_list(request):
     logger.info("INFO 레벨로 출력")
     """

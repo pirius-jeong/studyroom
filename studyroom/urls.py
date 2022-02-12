@@ -55,4 +55,8 @@ urlpatterns = [
     # sms_views.py
     path('sms/',
          sms_views.sms_list, name='sms_list'),
+    path('sms/send/',
+         sms_views.sms_send, name='sms_send'),
+    path('sms/sendsms/',
+         sms_views.send_sms, name='send_sms'),
 ]
