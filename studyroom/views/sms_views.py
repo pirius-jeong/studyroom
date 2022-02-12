@@ -187,6 +187,8 @@ def send_sms(request):
             time.sleep(5)
             res = get_request('GET', 'requestId', requestId, '')
             print("=== sms 발송요청 조회(재요청) 응답 :", res['status_code'], res['data'])
+            sms.statusCode = res['data']['statusCode']
+            sms.statusName = res['data']['statusName']
 
         messageId = res['data']['messages'][0]['messageId']
         print("===== messageId :", messageId)
@@ -203,6 +205,12 @@ def send_sms(request):
             sms.statusCode = res['data']['statusCode']
             sms.statusName = res['data']['statusName']
             sms.messageStatus = res['data']['messages'][0]['status']
+
+            if sms.messageStatus != 'COMPLETED':
+                time.sleep(5)
+                res = get_request('GET', 'messageId', messageId, '')
+                print("=== sms 발송 결과조회(재요청) 응답 :", res['status_code'], res['data'])
+                sms.messageStatus = res['data']['messages'][0]['status']
             sms.save()
     
     # sms 발송 후 sms 발송이력 화면으로 돌아가기
