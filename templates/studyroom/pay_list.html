@@ -25,7 +25,7 @@
     <table class="table">
         <thead>
         <tr class="text-center thead-light">
-            <th>수납일</th>
+            <th>수납일시</th>
             <th>구분</th>
             <th>납부자</th>
             <th>학생</th>
@@ -37,7 +37,7 @@
         {% if pay_list %}
         {% for pay in pay_list %}
         <tr class="text-center">
-            <td>{{ pay.pay_date }}</td>
+            <td>{{ pay.pay_date|slice:":4" }} {{ pay.pay_date|slice:"4:8" }} {{ pay.pay_date|slice:"8:" }}</td>
             <td>{{ pay.get_pay_type_display }}</td>
             <td>{{ pay.payer }}</td>
             <td>{{ pay.account.student.name }}</td>

@@ -39,20 +39,21 @@ class Command(BaseCommand):
                         (select student_id,\'d\'||count(1) as sugang_type \
                         from studyroom_sugang \
                         where %s between start_mt and end_mt \
-                        group by student_id) a, studyroom_student b,studyroom_priceplan p, studyroom_account ac \
+                        group by student_id) a, studyroom_student b,studyroom_priceplan p, studyroom_account ac, studyroom_student c \
                         where a.student_id = b.id \
                         and a.sugang_type = p.sugang_type \
                         and b.grade = p.grade \
                         and %s between p.start_mt and p.end_mt \
-                        and a.student_id = ac.sub_student_id" %(bill_mt, bill_mt), con, index_col=None)
+                        and b.id = c.brother_id \
+                        and c.id = ac.student_id" %(bill_mt, bill_mt), con, index_col=None)
 
         recommend_dc_list = pd.read_sql("\
                         select id, -10000 as recommend_dc_amt from studyroom_account \
                         where %s between recommend_dc_start  and recommend_dc_end " %(bill_mt), con, index_col=None)
 
         brother_dc_list = pd.read_sql("\
-                        select id, -0.1 as brother_dc_rate from studyroom_account \
-                        where brother_dc_yn = 'y'", con, index_col=None)
+                        select a.id, -0.1 as brother_dc_rate from studyroom_account a, studyroom_student s \
+                        where a.student_id = s.id and s.brother_id is not null", con, index_col=None)
 
         refund_amt_list = pd.read_sql("\
                         select ac.id, p.refund*count(1) as refund_amt  from \
@@ -74,13 +75,14 @@ class Command(BaseCommand):
                         (select student_id,\'d\'||count(1) as sugang_type \
                         from studyroom_sugang \
                         where %s between start_mt and end_mt \
-                        group by student_id) a, studyroom_student b,studyroom_priceplan p, studyroom_account ac, studyroom_absence ab \
+                        group by student_id) a, studyroom_student b,studyroom_priceplan p, studyroom_account ac, studyroom_absence ab, studyroom_student c \
                         where a.student_id = b.id \
                         and a.sugang_type = p.sugang_type \
                         and b.grade = p.grade \
                         and %s between p.start_mt and p.end_mt \
                         and a.student_id = ac.student_id \
-                        and ac.sub_student_id = ab.student_id \
+                        and c.brother_id = ab.student_id \
+                        and ac.student_id = c.id \
                         and ab.absence_dt between %s and %s \
                         group by ac.id" %(work_mt, work_mt, work_fr, work_to) , con, index_col=None)
 

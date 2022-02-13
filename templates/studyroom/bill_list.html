@@ -9,41 +9,40 @@
             <span class="badge badge-info">청구내역</span>
         </h1>
     </div>
-    <table class="table">
-        <tbody>
-            <tr>
-                <td>
-                    <select name='bill_mt' class="form-control billmt" value="{{ billmt|default_if_none:'' }}">
-                        {% if billmt %}
-                        <option value=billmt selected>--   {{ billmt }}   --</option>
-                        {% else %}
-                        <option value='' selected>--   청구월   --</option>
-                        {% endif %}
-                        <option value='202202'>22년 2월</option>
-                        <option value='202203'>22년 3월</option>
-                        <option value='202204'>22년 4월</option>
-                    </select>
-                </td>
-                <td>
-                    <select name='bill_status' class="form-control billstatus" value="{{ billstatus|default_if_none:'' }}">
-                      <option value='' selected>--   상태   --</option>
-                      <option value='OP'>발행</option>
-                      <option value='FP'>완납</option>
-                      <option value='PP'>부분납</option>
-                    </select>
-                </td>
-                <td>
-                    <button class="btn btn-outline-secondary" type="button" id="btn_search">찾기</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="col-xs-2">
+            <button class="btn " type="button" >청구월</button>
+        </div>
+        <div class="col-xs-2">
+            <select name='bill_mt' class="form-control billmt" value="{{ billmt|default_if_none:'' }}"
+                    style="width:200px;">
 
+                {% for b in bml %}
+                    <option value={{ b.bill_mt }}>{{ b.bill_mt|slice:"2:4" }}년 {{ b.bill_mt|slice:"4:" }}월</option>
+                {% endfor%}
+            </select>
+        </div>
+        <div class="col-xs-2">
+            <button class="btn " type="button" >상태</button>
+        </div>
+        <div class="col-xs-2">
+            <select name='bill_status' class="form-control billstatus" value="{{ billstatus|default_if_none:'' }}"
+                    style="width:200px;">
+                <option value='OP'>발행</option>
+                <option value='FP'>완납</option>
+                <option value='PP'>부분납</option>
+            </select>
+        </div>
+        <div class="col-xs-2">
+            <button class="btn btn-outline-secondary" type="button" id="btn_search">찾기</button>
+        </div>
+        <div style="width:100px;">
+        </div>
+    </div>
 
     <table class="table">
         <thead>
         <tr class="text-center thead-light">
-            <th>번호</th>
             <th>이름</th>
             <th>청구월</th>
             <th>청구금액</th>
@@ -58,12 +57,8 @@
         {% if bill_list %}
         {% for bill in bill_list %}
         <tr class="text-center">
-            <td>
-                <!-- 번호 = 전체건수 - 시작인덱스 - 현재인덱스 + 1 -->
-                {{ bill_list.paginator.count|sub:bill_list.start_index|sub:forloop.counter0|add:1 }}
-            </td>
             <td>{{ bill.account.student.name }} {{ bill.account.student.brother.name }}</td>
-            <td>{{ bill.bill_mt }}</td>
+            <td>{{ bill.bill_mt|slice:"2:4" }}년 {{ bill.bill_mt|slice:"4:" }}월</td>
             <td>{{ bill.bill_amt|intcomma }}</td>
             <td>{{ bill.base_amt|intcomma }} {% if bill.account.student.brother %}{{ bill.brother_base_amt|intcomma }}{% endif %}</td>
             <td>{{ bill.refund_amt|intcomma }} {% if bill.account.student.brother %}{{ bill.brother_refund_amt|intcomma }}{% endif %}</td>

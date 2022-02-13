@@ -30,7 +30,6 @@
             <th>납부자</th>
             <th>납부자 전화번호</th>
             <th>SMS 전화번호</th>
-            <th>형제할인</th>
             <th>추천할인(from)</th>
             <th>추천할인(to)</th>
         </tr>
@@ -48,7 +47,6 @@
             <td>{{ account.payer|default_if_none:"미등록" }}</td>
             <td>{{ account.payer_phone_num|default_if_none:"미등록" }}</td>
             <td>{{ account.sms_phone_num|default_if_none:"미등록" }}</td>
-            <td>{{ account.brother_dc_yn }}</td>
             <td>{{ account.recommend_dc_start|default_if_none:"" }}</td>
             <td>{{ account.recommend_dc_end|default_if_none:"" }}</td>
         </tr>
