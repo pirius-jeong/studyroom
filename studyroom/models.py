@@ -149,8 +149,8 @@ class Pay(models.Model):
         계좌이체 = 'AT'
 
     class PayStatus(models.TextChoices):
-        등록 = 'OP'
-        Close = 'CO'
+        미연결 = 'OP'
+        연결 = 'CO'
 
     def __str__(self):
         return (self.pay_date)
@@ -160,6 +160,7 @@ class Pay(models.Model):
     pay_amt = models.IntegerField()
     payer = models.CharField(max_length=30, null=True, blank=True)
     pay_status = models.CharField(max_length=2, choices=PayStatus.choices)
+    account = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, blank=True)
     bill = models.ForeignKey(Bill, on_delete=models.SET_NULL, null=True, blank=True)
     create_date = models.DateTimeField()
     modify_date = models.DateTimeField(auto_now=True)
