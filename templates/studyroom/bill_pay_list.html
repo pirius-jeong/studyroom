@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load studyroom_filter %}
+{% load humanize %}
+{% block content %}
+
+<div class="container my-3">
+    <div>
+        <h1>
+            <span class="badge badge-info">청구-수납 연결</span>
+        </h1>
+    </div>
+    <hr class="my-3">
+    <form method="post" class="post-form my-3" action="{% url 'studyroom:bill_pay_con' %}">
+    <div class="row">
+        {% csrf_token %}
+        <hr class="my-3">
+        <div style="overflow:scroll; width:550px; height:650px;">
+            <div class="row" >
+                <div style="width:50px"></div>
+                <select name='billmt' class="form-control billmt" value="{{ billmt|default_if_none:'' }}"
+                    style="width:200px;">
+                <option selected value="">전체</option>
+                {% for b in bml %}
+                    {% if billmt == b.bill_mt %}
+                    <option selected value={{ b.bill_mt }}>{{ b.bill_mt|slice:"2:4" }}년 {{ b.bill_mt|slice:"4:" }}월</option>
+                    {% else %}
+                    <option value={{ b.bill_mt }}>{{ b.bill_mt|slice:"2:4" }}년 {{ b.bill_mt|slice:"4:" }}월</option>
+                    {% endif %}
+                {% endfor%}
+                </select>
+                <div class="col-xs-2">
+                    <button class="btn btn-outline-secondary" type="button" id="bill_search">찾기</button>
+                </div>
+                <div style="width:50px"></div>
+                <div class="col-xs-2">
+                    <button type="submit" class="btn btn-secondary">청구-수납 연결</button>
+                </div>
+            </div>
+        <hr class="my-3">
+        <table class="table">
+            <thead>
+            <tr class="text-center thead-light">
+                <th>선택</th>
+                <th>이름</th>
+                <th>청구월</th>
+                <th>청구액</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if bill_list %}
+            {% for bill in bill_list %}
+            <tr class="text-center">
+                <td>
+                    <input id="bill_id" type="checkbox" name="bill_id" value={{ bill.id }}>
+                </td>
+                <td>{{ bill.account.student.name }} {{ bill.account.student.brother.name }}</td>
+                <td>{{ bill.bill_mt|slice:"2:4" }}년 {{ bill.bill_mt|slice:"4:" }}월</td>
+                <td>{{ bill.bill_amt|intcomma }}</td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+        </div>
+        <div  style="overflow:scroll; width:550px; height:650px; float:right;">
+        <div class="row">
+            <div style="width:50px"></div>
+            <div class="col-xs-2">
+                <input id="input_paydate" type="text" class="form-control paydate" value="{{ paydate|default_if_none:'' }}">
+            </div>
+            <div class="col-xs-2">
+                <button class="btn btn-outline-secondary" type="button" id="pay_search">찾기</button>
+                </div>
+            </div>
+        <hr class="my-3">
+        <table class="table">
+            <thead>
+            <tr class="text-center thead-light">
+                <th>선택</th>
+                <th>수납일시</th>
+                <th>납부자</th>
+                <th>금액</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if pay_list %}
+            {% for pay in pay_list %}
+            <tr class="text-center">
+                <td>
+                    <input id="pay_id" type="checkbox" name="pay_id" value={{ pay.id }}>
+                </td>
+                <td>{{ pay.pay_date|slice:":4" }} {{ pay.pay_date|slice:"4:8" }} {{ pay.pay_date|slice:"8:"  }}</td>
+                <td>{{ pay.payer }}</td>
+                <td>{{ pay.pay_amt }}</td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+    </form>
+</div>
+<form id="searchForm" method="get" action="{% url 'studyroom:bill_pay_list' %}">
+    <input type="hidden" id="billmt" name="billmt" value="{{ billmt|default_if_none:'' }}">
+    <input type="hidden" id="paydate" name="paydate" value="{{ paydate|default_if_none:'' }}">
+</form>
+{% endblock %}
+{% block script %}
+<script type='text/javascript'>
+$(document).ready(function(){
+    $("#bill_search").on('click', function() {
+        $("#billmt").val($(".billmt").val());
+        $("#paymt").val($(".paymt").val());
+        $("#searchForm").submit();
+    });
+    $("#pay_search").on('click', function() {
+        $("#billmt").val($(".billmt").val());
+        $("#paydate").val($(".paydate").val());
+        $("#searchForm").submit();
+    });
+    $("input[name=bill_id]:checkbox").click(function(){
+        var cnt = $("input[name=bill_id]:checkbox:checked").length;
+        if(cnt>1){
+            alert('1개만 선택 가능합니다.')
+            $(this).prop('checked', false);
+        }
+    });
+    $("input[name=pay_id]:checkbox").click(function(){
+        var cnt = $("input[name=pay_id]:checkbox:checked").length;
+        if(cnt>1){
+            alert('1개만 선택 가능합니다.')
+            $(this).prop('checked', false);
+        }
+    });
+});
+</script>
+{% endblock %}

@@ -47,7 +47,11 @@ urlpatterns = [
     # bill_views.py
     path('bill/',
          bill_views.bill_list, name='bill_list'),
-    
+    path('bill/bill_pay/',
+         bill_views.bill_pay_list, name='bill_pay_list'),
+    path('bill/bill_pay_con/',
+         bill_views.bill_pay_con, name='bill_pay_con'),
+
     # pay_views.py
     path('pay/',
          pay_views.pay_list, name='pay_list'),

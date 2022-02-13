@@ -163,6 +163,7 @@ def send_sms(request):
             sms.requestId = requestId
             sms.requestTime = res['data']['requestTime']
             sms.create_date = timezone.now()
+            sms.user = request.user
             sms.save()
 
         # SMS 발송 요청 조회(messgeId 받기)

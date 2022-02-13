@@ -98,12 +98,8 @@ class Command(BaseCommand):
                 pay_date = td[2].text.replace('-', '').replace(' ', '').replace(':', '')
                 pay_amt = int(td[3].text.replace(',', ''))
                 payer = td[8].text
-                try:
-                    account = Account.objects.get(payer_phone_num=payer)
-                    pay = Pay(pay_status=pay_status, pay_type=pay_type, pay_date=pay_date, pay_amt=pay_amt, payer=payer, account=account,
-                              create_date=timezone.now())
-                except:
-                    pay = Pay(pay_status=pay_status, pay_type=pay_type, pay_date=pay_date, pay_amt=pay_amt, payer=payer, create_date=timezone.now())
+                pay = Pay(pay_status=pay_status, pay_type=pay_type, pay_date=pay_date, pay_amt=pay_amt, payer=payer,
+                          create_date=timezone.now())
                 pay.save()
                 row = row + 1
                 if row == rows:
