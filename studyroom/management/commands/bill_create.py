@@ -3,7 +3,6 @@ from django.utils import timezone
 
 import sqlite3
 import pandas as pd
-from pandas import Series, DataFrame
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
