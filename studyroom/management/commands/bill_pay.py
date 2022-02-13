@@ -14,7 +14,7 @@ class Command(BaseCommand):
 
         con = sqlite3.connect("db.sqlite3")
 
-        pay_list = pd.read_sql("select sb.id as bill_id, sb.bill_mt, sp.id as pay_id, sp.pay_amt , substring(sp.pay_date ,1,8) as pay_dt \
+        pay_list = pd.read_sql("select sb.id as bill_id, sb.bill_mt, sp.id as pay_id, sp.pay_amt , substr(sp.pay_date ,1,8) as pay_dt \
                                 from studyroom_bill sb, studyroom_pay sp \
                                 where sb.bill_status = \'OP\' and sp.pay_status = \'OP\'  \
                                 and sb.account_id = sp.account_id and sb.bill_amt = sp.pay_amt", \
