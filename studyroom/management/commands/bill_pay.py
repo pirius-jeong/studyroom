@@ -43,4 +43,4 @@ class Command(BaseCommand):
                 pay.save()
 
             else:
-                print(i, '==> Bill-Pay mismatch')
+                print('bill_mt:', pay_list.iloc[i].bill_mt,'pay_dt:',pay_list.iloc[i].pay_dt,pay_list.iloc[i].pay_amt, '==> Bill-Pay mismatch')
