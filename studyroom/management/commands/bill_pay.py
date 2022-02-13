@@ -3,6 +3,7 @@ from django.core.management.base import BaseCommand
 import sqlite3
 import pandas as pd
 from datetime import datetime
+from datetime import date
 from dateutil.relativedelta import relativedelta
 
 from studyroom.models import Bill, Pay
@@ -21,15 +22,16 @@ class Command(BaseCommand):
                     con, index_col=None)
 
         for i in pay_list.index:
-            pay_day = pay_list.at[i, 'pay_dt'][-2:]
-            pay_mt = pay_list.at[i, 'pay_dt'][:6]
-            if pay_day < '10':
-                bill_mt = pay_mt
+            pay_dt = pay_list.at[i, 'pay_dt'][-2:]
+            pay_mt = pay_list.at[i, 'pay_dt'][4:6]
+            pay_yt = pay_list.at[i, 'pay_dt'][:4]
+            if pay_dt < '10':
+                bill_mt = str(pay_yt) + str(pay_mt)
             else:
-                bill_mt = (datetime.today() + relativedelta(months=1)).strftime("%Y%m")
+                bill_mt = (date(int(pay_yt), int(pay_mt), int(pay_dt)) + relativedelta(months=1)).strftime("%Y%m")
 
             if pay_list.at[i, 'bill_mt'] == bill_mt:
-                print('bill_mt:', pay_list.iloc[i].bill_mt,'pay_dt:',pay_list.iloc[i].pay_dt,pay_list.iloc[i].pay_amt, '==> Bill-Pay concatenated')
+                print('bill_mt:', pay_list.iloc[i].bill_mt,'pay_dt:', pay_list.iloc[i].pay_dt,'pay_mt:', bill_mt, '==> Bill-Pay concatenated')
 
                 bill = Bill.objects.get(pk=pay_list.at[i, 'bill_id'])
                 bill.pay_id = pay_list.at[i, 'pay_id']
@@ -43,4 +45,4 @@ class Command(BaseCommand):
                 pay.save()
 
             else:
-                print('bill_mt:', pay_list.iloc[i].bill_mt,'pay_dt:',pay_list.iloc[i].pay_dt,pay_list.iloc[i].pay_amt, '==> Bill-Pay mismatch')
+                print('bill_mt:', pay_list.iloc[i].bill_mt,'pay_dt:',pay_list.iloc[i].pay_dt,'pay_mt:', bill_mt, '==> Bill-Pay mismatch')
