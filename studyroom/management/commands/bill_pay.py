@@ -29,7 +29,7 @@ class Command(BaseCommand):
                 bill_mt = (datetime.today() + relativedelta(months=1)).strftime("%Y%m")
 
             if pay_list.at[i, 'bill_mt'] == bill_mt:
-                print(i, '==> Bill-Pay concatenated')
+                print('bill_mt:', pay_list.iloc[i].bill_mt,'pay_dt:',pay_list.iloc[i].pay_dt,pay_list.iloc[i].pay_amt, '==> Bill-Pay concatenated')
 
                 bill = Bill.objects.get(pk=pay_list.at[i, 'bill_id'])
                 bill.pay_id = pay_list.at[i, 'pay_id']
