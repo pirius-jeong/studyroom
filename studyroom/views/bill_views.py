@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.db.models import Q
 
 from studyroom.models import Bill, Pay
+from studyroom.com import bill_dml
 
 import logging
 logger = logging.getLogger('studyroom')
@@ -101,3 +102,39 @@ def bill_pay_con(request):
 
     context = {'bill_list': bill_list, 'billmt': '', 'bml': bml, 'pay_list': pay_list, 'paydate': ''}
     return render(request, 'studyroom/bill_pay_list.html', context)
+
+@login_required(login_url='common:login')
+def bill_save(request):
+    """
+    청구 재발행
+    """
+    # checked 청구 재발행
+    bill_id = request.POST.get('bill_id', '')
+    print('== 청구 재발행:',bill_id)
+    bill_dml(bill_id)
+
+    # 입력 파라미터
+    page = request.GET.get('page', '')  # 페이지
+    billmt = request.GET.get('billmt', '')  # 검색어
+    billstatus = request.GET.get('billstatus', '')  # 검색어
+
+    # 조회
+    bill_list = Bill.objects.order_by('id')
+    if billmt:
+        bill_list = bill_list.filter(
+            Q(bill_mt__icontains=billmt)  # 청구월 검색
+        ).distinct()
+    if billstatus:
+        bill_list = bill_list.filter(
+            Q(bill_status__icontains=billstatus)  # 청구상태 검색
+        ).distinct()
+
+    bml = Bill.objects.all().values('bill_mt').distinct()
+    bsl = Bill.objects.all().values('bill_status').distinct()
+
+    # 페이징처리
+    paginator = Paginator(bill_list, 10)  # 페이지당 10개씩 보여주기
+    page_obj = paginator.get_page(page)
+
+    context = {'bill_list': page_obj, 'page': page, 'billmt': billmt, 'billstatus': billstatus, 'bml': bml, 'bsl': bsl}
+    return render(request, 'studyroom/bill_list.html', context)
