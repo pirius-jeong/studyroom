@@ -51,6 +51,8 @@ urlpatterns = [
          bill_views.bill_pay_list, name='bill_pay_list'),
     path('bill/bill_pay_con/',
          bill_views.bill_pay_con, name='bill_pay_con'),
+    path('bill/bill_save/',
+         bill_views.bill_save, name='bill_save'),
 
     # pay_views.py
     path('pay/',
