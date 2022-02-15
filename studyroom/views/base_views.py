@@ -2,8 +2,10 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
-from datetime import datetime
-from ..models import Student, Sugang
+from datetime import datetime, date
+from dateutil.relativedelta import relativedelta
+from django.utils import timezone
+from ..models import Student, Sugang, PricePlan
 
 @login_required(login_url='common:login')
 def index(request):
@@ -40,3 +42,49 @@ def detail(request, student_id):
 
     context = {'student': student, 'sugang_list': sugang_list}
     return render(request, 'studyroom/student_detail.html', context)
+
+@login_required(login_url='common:login')
+def priceplan(request):
+    """
+    요금표 출력
+    """
+    pricepln_list = PricePlan.objects.order_by('grade', 'sugang_type')
+
+    context = {'priceplan_list': pricepln_list}
+    return render(request, 'studyroom/priceplan.html', context)
+
+@login_required(login_url='common:login')
+def priceplan_create(request):
+    """
+        요금표 생성
+    """
+    grade = request.POST.get('grade', '')  # 검색어
+    sugang_type = request.POST.get('sugang_type', '')  # 검색어
+    price = request.POST.get('price', '')  # 검색어
+    refund = request.POST.get('refund', '')  # 검색어
+    start_mt = request.POST.get('start_mt', '')  # 검색어
+
+    print('==== create priceplan : ',grade, sugang_type, price, refund, start_mt)
+
+    priceplan = PricePlan.objects.get(grade=grade, sugang_type=sugang_type, end_mt='999912')
+
+    if priceplan.start_mt >= start_mt:
+        print('==== error : start_mt alread exist')
+    else:
+        start_yy = start_mt[:4]
+        start_mm = start_mt[-2:]
+        end_mt = (date(int(start_yy), int(start_mm), 1) + relativedelta(months=-1)).strftime("%Y%m")
+        priceplan.end_mt = end_mt
+        priceplan.save()
+
+        new_priceplan = PricePlan(grade=grade, sugang_type=sugang_type, price=price, refund=refund, start_mt=start_mt,
+                                  end_mt='999912', create_date=timezone.now())
+        new_priceplan.save()
+
+    """
+    요금표 출력
+    """
+    pricepln_list = PricePlan.objects.order_by('grade', 'sugang_type')
+
+    context = {'priceplan_list': pricepln_list}
+    return render(request, 'studyroom/priceplan.html', context)
