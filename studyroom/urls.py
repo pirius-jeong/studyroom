@@ -10,6 +10,10 @@ urlpatterns = [
          base_views.index, name='index'),
     path('<int:student_id>/',
          base_views.detail, name='detail'),
+    path('priceplan/',
+         base_views.priceplan, name='priceplan'),
+    path('priceplan/create/',
+         base_views.priceplan_create, name='priceplan_create'),
 
     # student_views.py
     path('student/create/',
