@@ -1,13 +1,12 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<div class="container">
+
+<div class="container my-3">
     <div>
         <h1>
-            <span class="badge badge-secondary">계정 등록/변경</span>
+            <span class="badge badge-info">계정 등록/변경</span>
         </h1>
     </div>
-
     <form method="post" class="post-form my-3">
         {% csrf_token %}
         <!-- 오류표시 Start -->
@@ -22,7 +21,9 @@
             </div>
         {% endif %}
         <!-- 오류표시 End -->
-        {{ form.as_p }}
+        <table class="table table-hover">
+        {{ form.as_table }}
+        </table>
         <button type="submit" class="btn btn-primary">저장하기</button>
     </form>
 </div>
