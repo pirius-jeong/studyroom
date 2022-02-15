@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<div class="container">
+
+<div class="container my-3">
     <div>
         <h1>
-            <span class="badge badge-secondary">수강 등록/변경</span>
+            <span class="badge badge-info">수강 등록/변경</span>
         </h1>
     </div>
+    <hr class="my-3">
 
     {% if crud == 'create' %}
     <form method="post" class="post-form my-3" action="{% url 'studyroom:sugang_create' student.id %}">
