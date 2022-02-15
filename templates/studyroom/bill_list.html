@@ -10,6 +10,8 @@
         </h1>
     </div>
     <hr class="my-3">
+    <form id="billsaveForm" method="post" action="{% url 'studyroom:bill_save' %}">
+            {% csrf_token %}
     <div class="row">
         <div class="col-xs-2">
             <button class="btn " type="button" >청구월</button>
@@ -46,7 +48,14 @@
         <div class="col-xs-2">
             <button class="btn btn-outline-secondary" type="button" id="btn_search">찾기</button>
         </div>
-        <div class="col-xs-2" style="width:120px">
+        <div class="col-xs-2" style="width:50px">
+        </div>
+
+            <div class="col-xs-2">
+                <button class="btn btn-secondary" type="button" id="btn_bill_save">청구 재발행</button>
+            </div>
+
+        <div class="col-xs-2" style="width:50px">
         </div>
         <div class="col-xs-2">
             <button class="btn btn-secondary" type="button" id="btn_bill_pay">청구-수납 연결</button>
@@ -56,6 +65,7 @@
     <table class="table">
         <thead>
         <tr class="text-center thead-light">
+            <th></th>
             <th>이름</th>
             <th>청구월</th>
             <th>청구금액</th>
@@ -71,6 +81,9 @@
         {% if bill_list %}
         {% for bill in bill_list %}
         <tr class="text-center">
+            <td>
+                <input type="checkbox" name="bill_id" value={{ bill.id }}>
+            </td>
             <td>{{ bill.account.student.name }} {{ bill.account.student.brother.name }}</td>
             <td>{{ bill.bill_mt|slice:"2:4" }}년 {{ bill.bill_mt|slice:"4:" }}월</td>
             <td>{{ bill.bill_amt|intcomma }}</td>
@@ -89,6 +102,7 @@
         {% endif %}
         </tbody>
     </table>
+    </form>
     <!-- 페이징처리 시작 -->
     <ul class="pagination justify-content-center">
         <!-- 이전페이지 -->
@@ -133,6 +147,7 @@
     <input type="hidden" id="billstatus" name="billstatus" value="{{ billstatus|default_if_none:'' }}">
     <input type="hidden" id="page" name="page" value="{{ page }}">
 </form>
+
 <form id="billpayForm" method="get" action="{% url 'studyroom:bill_pay_list' %}">
 </form>
 {% endblock %}
@@ -154,6 +169,22 @@ $(document).ready(function(){
     });
     $("#btn_bill_pay").on('click', function() {
         $("#billpayForm").submit();
+    });
+    $("input[name=bill_id]:checkbox").click(function(){
+        var cnt = $("input[name=bill_id]:checkbox:checked").length;
+        if(cnt>1){
+            alert('1개만 선택 가능합니다.')
+            $(this).prop('checked', false);
+        }
+    });
+    $("#btn_bill_save").on('click', function() {
+        var cnt = $("input[name=bill_id]:checkbox:checked").length;
+        if(cnt<1){
+            alert('청구 재발행 대상을 먼저 선택 하세요')
+        }
+        if(cnt>0){
+            $("#billsaveForm").submit();
+        }
     });
 });
 </script>
