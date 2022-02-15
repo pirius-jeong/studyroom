@@ -111,6 +111,7 @@ class Command(BaseCommand):
                 if row == rows:
                     break
             if row == rows:
+                print(timezone.now(), rows,  '건 pay created')
                 break
             driver.find_element(By.XPATH, page % str(i + 2)).click()
             time.sleep(3)
