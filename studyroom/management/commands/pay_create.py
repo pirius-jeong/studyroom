@@ -100,7 +100,7 @@ class Command(BaseCommand):
                 payer = td[8].text
 
                 try:
-                    account = Account.objects.get(payer_phone_num=payer)
+                    account = Account.objects.get(payer_phone_num__contains=payer)
                     pay = Pay(pay_status=pay_status, pay_type=pay_type, pay_date=pay_date, pay_amt=pay_amt, payer=payer,
                               account=account,
                               create_date=timezone.now())

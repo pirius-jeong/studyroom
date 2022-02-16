@@ -20,7 +20,7 @@
         <table class="table">
             <thead>
             <tr class="text-center thead-light">
-                <th>선택</th>
+                <th>전체<input type="checkbox" id="allchk"></th>
                 <th>이름</th>
                 <th>폰번호</th>
             </tr>
@@ -68,6 +68,13 @@ $('#textBox').keyup(function (e) {
  }
  else { $('.textCount').text(content.length + 'bytes');
  }
+});
+$('#allchk').click(function(){
+    var checked = $('#allchk').is(':checked');
+    if(checked)
+        $('input:checkbox').prop('checked',true);
+    else
+        $('input:checkbox').prop('checked',false);
 });
 </script>
 {% endblock %}
