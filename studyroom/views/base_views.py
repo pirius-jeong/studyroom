@@ -104,8 +104,12 @@ def hometax(request):
     if request.method == 'GET':
         return HttpResponse(status=200)
     if request.method == 'POST':
-        serializer = PostSerializer(data = request.data)
+        serializer = PostSerializer(data = request.data, required=False)
         serializer.create_date = timezone.now()
+        try:
+            serializer.account = Account.objects.get(payer_phone_num__contains=serializer.payer)
+        except:
+            print('=== account is None ')
 
         if(serializer.is_valid()):
             serializer.save()
