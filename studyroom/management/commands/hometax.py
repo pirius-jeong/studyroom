@@ -28,7 +28,7 @@ class Command(BaseCommand):
                 'payer': payer
             }
 
-            url = 'http://kizacademy.pythonanywhere.com/hometax.html'
+            url = 'http://kizacademy.pythonanywhere.com/hometax/hometax.html'
             response = requests.post(url, data=datas)
 
             return response

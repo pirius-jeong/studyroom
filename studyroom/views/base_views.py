@@ -5,7 +5,7 @@ from django.db.models import Q
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
-from ..models import Student, Sugang, PricePlan
+from ..models import Student, Sugang, PricePlan, Account, Pay
 
 @login_required(login_url='common:login')
 def index(request):
@@ -95,7 +95,7 @@ def hometax(request):
     """
         pay 생성
     """
-    pay_status, pay_type, pay_date, pay_amt, payer,
+
     pay_status = request.POST.get('pay_status', '')  # 검색어
     pay_type = request.POST.get('pay_type', '')  # 검색어
     pay_date = request.POST.get('pay_date', '')  # 검색어
