@@ -95,7 +95,7 @@ def hometax(request):
     """
         pay 생성
     """
-
+    print("==== hometax.html ====")
     pay_status = request.POST.get('pay_status', '')  # 검색어
     pay_type = request.POST.get('pay_type', '')  # 검색어
     pay_date = request.POST.get('pay_date', '')  # 검색어
