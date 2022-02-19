@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load studyroom_filter %}
+{% load humanize %}
+{% block content %}
+
+<div class="container my-3">
+    <div>
+        <h1>
+            <span class="badge badge-info">수납 생성 결과</span>
+        </h1>
+    </div>
+    <hr class="my-3">
+
+    <table class="table">
+        <thead>
+        <tr class="text-center thead-light">
+            <th>수납일시</th>
+            <th>구분</th>
+            <th>납부자</th>
+            <th>학생</th>
+            <th>수납금액</th>
+            <th>상태</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="text-center">
+            <td>{{ pay_status }}</td>
+            <td>{{ pay_type }}</td>
+            <td>{{ pay_date }}</td>
+            <td>{{ pay_amt }}</td>
+            <td>{{ payer }}</td>
+            <td>{{ account.student.name }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+{% endblock %}

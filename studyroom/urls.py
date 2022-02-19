@@ -14,6 +14,8 @@ urlpatterns = [
          base_views.priceplan, name='priceplan'),
     path('priceplan/create/',
          base_views.priceplan_create, name='priceplan_create'),
+    path('hometax/',
+         base_views.hometax, name='hometax'),
 
     # student_views.py
     path('student/create/',
