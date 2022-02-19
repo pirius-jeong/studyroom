@@ -98,38 +98,8 @@ def priceplan_create(request):
     return render(request, 'studyroom/priceplan.html', context)
 
 
-
-def hometax(request):
-    """
-        pay 생성
-    """
-    print("==== hometax.html ====")
-    pay_status = request.POST.get('pay_status', '')  # 검색어
-    pay_type = request.POST.get('pay_type', '')  # 검색어
-    pay_date = request.POST.get('pay_date', '')  # 검색어
-    pay_amt = request.POST.get('pay_amt', '')  # 검색어
-    payer = request.POST.get('payer', '')  # 검색어
-
-    try:
-        account = Account.objects.get(payer_phone_num__contains=payer)
-        pay = Pay(pay_status=pay_status, pay_type=pay_type, pay_date=pay_date, pay_amt=pay_amt, payer=payer,
-                  account=account,
-                  create_date=timezone.now())
-    except:
-        pay = Pay(pay_status=pay_status, pay_type=pay_type, pay_date=pay_date, pay_amt=pay_amt, payer=payer,
-                  create_date=timezone.now())
-
-    pay.save()
-
-    print('==== pay insert : ',pay_status, pay_type, pay_date, pay_amt, payer)
-
-    context = {'pay_status':pay_status, 'pay_type':pay_type, 'pay_date':pay_date, 'pay_amt':pay_amt, 'payer':payer,
-               'account':account}
-    return render(request, 'hometax/hometax.html', context)
-
-
 @api_view(['POST'])
-def post_api(request):
+def hometax(request):
     if request.method == 'GET':
         return HttpResponse(status=200)
     if request.method == 'POST':
