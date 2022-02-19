@@ -5,6 +5,15 @@ from django.db.models import Q
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
+from django.shortcuts import render
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.http.response import HttpResponse
+from .models import Pay
+from .serializers import PostSerializer
+
+
 from ..models import Student, Sugang, PricePlan, Account, Pay
 
 @login_required(login_url='common:login')
@@ -118,6 +127,24 @@ def hometax(request):
     context = {'pay_status':pay_status, 'pay_type':pay_type, 'pay_date':pay_date, 'pay_amt':pay_amt, 'payer':payer,
                'account':account}
     return render(request, 'hometax/hometax.html', context)
+
+
+@api_view(['POST'])
+def post_api(request):
+    if request.method == 'GET':
+        return HttpResponse(status=200)
+    if request.method == 'POST':
+        serializer = PostSerializer(data = request.data, many=True)
+        account = Account.objects.get(payer_phone_num__contains=serializer.payer)
+        serializer.account = account
+        serializer.create_date = timezone.now()
+        if(serializer.is_valid()):
+            serializer.save()
+            return Response(serializer.data ,status=200)
+        return Response(serializer.errors ,status=status.HTTP_400_BAD_REQUEST)
+
+
+
 
 
 

@@ -31,7 +31,7 @@ class Command(BaseCommand):
             url = 'http://kizacademy.pythonanywhere.com/hometax/hometax.html'
             response = requests.post(url, data=datas)
 
-            return response
+            return response.text
 
         tab = options['tab'][0]
 
