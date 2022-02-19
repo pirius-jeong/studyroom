@@ -9,7 +9,8 @@ from studyroom.models import Bill, Student
 def bill_dml(bill_id=''):
     con = sqlite3.connect("db.sqlite3")
 
-    if bill_id != '':
+    if bill_id != '': # 청구서 재발행
+        print('=== bill-id:',bill_id,'청구서 재발행')
         bill = Bill.objects.get(pk=bill_id)
         bill_mt = bill.bill_mt
     else:
@@ -94,6 +95,7 @@ def bill_dml(bill_id=''):
     bill_list = merge5.fillna(0)
 
     if bill_id == '': # 정기 청구
+        print('=== 정기청구 : bill_id',bill_id)
         for i in bill_list.index:
             account_id = bill_list.at[i, 'id']
             bill_status = 'OP'
@@ -116,6 +118,7 @@ def bill_dml(bill_id=''):
 
 
     else:  # 청구서 재발행
+        print('=== 청구서 재발행')
         bill = Bill.objects.get(pk=bill_id)
         account_id = bill.account.id
         rebill = bill_list.loc[bill_list['id'] == account_id]

@@ -1,8 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.shortcuts import render
-from django.db.models import Q
 
+from django.db.models import Q
+from django.shortcuts import render, get_object_or_404, redirect
 from studyroom.models import Bill, Pay
 from studyroom.com import bill_dml
 
@@ -109,32 +109,21 @@ def bill_save(request):
     청구 재발행
     """
     # checked 청구 재발행
-    bill_id = request.POST.get('bill_id', '')
-    print('== 청구 재발행:',bill_id)
-    bill_dml(bill_id)
+    if request.method == 'POST':
+        bill_id = request.POST.get('bill_id', '')
+        print('== 청구 재발행:', bill_id)
+        bill_dml(bill_id)
+        return redirect('studyroom:bill_list')
+    else:
+        # 조회
+        name = request.GET.get('name', '')  # 검색어
+        bill_list = Bill.objects.order_by('id')
+        if name:
+            bill_list = bill_list.filter(
+                Q(account__student__name__icontains=name) |  # 학생이름 검색
+                Q(account__student__brother__name__icontains=name)  # 학생이름 검색
+            ).distinct()
 
-    # 입력 파라미터
-    page = request.GET.get('page', '')  # 페이지
-    billmt = request.GET.get('billmt', '')  # 검색어
-    billstatus = request.GET.get('billstatus', '')  # 검색어
 
-    # 조회
-    bill_list = Bill.objects.order_by('id')
-    if billmt:
-        bill_list = bill_list.filter(
-            Q(bill_mt__icontains=billmt)  # 청구월 검색
-        ).distinct()
-    if billstatus:
-        bill_list = bill_list.filter(
-            Q(bill_status__icontains=billstatus)  # 청구상태 검색
-        ).distinct()
-
-    bml = Bill.objects.all().values('bill_mt').distinct()
-    bsl = Bill.objects.all().values('bill_status').distinct()
-
-    # 페이징처리
-    paginator = Paginator(bill_list, 10)  # 페이지당 10개씩 보여주기
-    page_obj = paginator.get_page(page)
-
-    context = {'bill_list': page_obj, 'page': page, 'billmt': billmt, 'billstatus': billstatus, 'bml': bml, 'bsl': bsl}
-    return render(request, 'studyroom/bill_list.html', context)
+        context = {'bill_list':bill_list, 'name':name}
+        return render(request, 'studyroom/bill_save.html', context)

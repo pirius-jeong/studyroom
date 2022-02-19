@@ -74,17 +74,20 @@ def priceplan_create(request):
 
     print('==== create priceplan : ',grade, sugang_type, price, refund, start_mt)
 
-    priceplan = PricePlan.objects.get(grade=grade, sugang_type=sugang_type, end_mt='999912')
+    try:
+        priceplan = PricePlan.objects.get(grade=grade, sugang_type=sugang_type, end_mt='999912')
 
-    if priceplan.start_mt >= start_mt:
-        print('==== error : start_mt alread exist')
-    else:
-        start_yy = start_mt[:4]
-        start_mm = start_mt[-2:]
-        end_mt = (date(int(start_yy), int(start_mm), 1) + relativedelta(months=-1)).strftime("%Y%m")
-        priceplan.end_mt = end_mt
-        priceplan.save()
-
+        if priceplan.start_mt >= start_mt:
+            print('==== error : start_mt alread exist')
+        else:
+            start_yy = start_mt[:4]
+            start_mm = start_mt[-2:]
+            end_mt = (date(int(start_yy), int(start_mm), 1) + relativedelta(months=-1)).strftime("%Y%m")
+            priceplan.end_mt = end_mt
+            priceplan.save()
+    except:
+        print('=== new price plan')
+    finally:
         new_priceplan = PricePlan(grade=grade, sugang_type=sugang_type, price=price, refund=refund, start_mt=start_mt,
                                   end_mt='999912', create_date=timezone.now())
         new_priceplan.save()

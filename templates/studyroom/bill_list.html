@@ -10,15 +10,14 @@
         </h1>
     </div>
     <hr class="my-3">
-    <form id="billsaveForm" method="post" action="{% url 'studyroom:bill_save' %}">
-            {% csrf_token %}
+
     <div class="row">
         <div class="col-xs-2">
             <button class="btn " type="button" >청구월</button>
         </div>
         <div class="col-xs-2">
             <select name='billmt' class="form-control billmt" value="{{ billmt|default_if_none:'' }}"
-                    style="width:200px;">
+                    style="width:150px;">
                 <option selected value="">전체</option>
                 {% for b in bml %}
                     {% if billmt == b.bill_mt %}
@@ -34,7 +33,7 @@
         </div>
         <div class="col-xs-2">
             <select name='billstatus' class="form-control billstatus" value="{{ billstatus|default_if_none:'' }}"
-                    style="width:200px;">
+                    style="width:150px;">
                 <option value='' selected>전체</option>
                 {% for s in bsl %}
                     {% if billstatus == s.bill_status %}
@@ -45,15 +44,14 @@
                 {% endfor %}
             </select>
         </div>
+
         <div class="col-xs-2">
             <button class="btn btn-outline-secondary" type="button" id="btn_search">찾기</button>
         </div>
         <div class="col-xs-2" style="width:50px">
         </div>
 
-            <div class="col-xs-2">
-                <button class="btn btn-secondary" type="button" id="btn_bill_save">청구 재발행</button>
-            </div>
+
 
         <div class="col-xs-2" style="width:50px">
         </div>
@@ -102,7 +100,6 @@
         {% endif %}
         </tbody>
     </table>
-    </form>
     <!-- 페이징처리 시작 -->
     <ul class="pagination justify-content-center">
         <!-- 이전페이지 -->
@@ -165,6 +162,7 @@ $(document).ready(function(){
         $("#billmt").val($(".billmt").val());
         $("#billstatus").val($(".billstatus").val());
         $("#page").val(1);  // 검색버튼을 클릭할 경우 1페이지부터 조회한다.
+
         $("#searchForm").submit();
     });
     $("#btn_bill_pay").on('click', function() {
@@ -175,15 +173,6 @@ $(document).ready(function(){
         if(cnt>1){
             alert('1개만 선택 가능합니다.')
             $(this).prop('checked', false);
-        }
-    });
-    $("#btn_bill_save").on('click', function() {
-        var cnt = $("input[name=bill_id]:checkbox:checked").length;
-        if(cnt<1){
-            alert('청구 재발행 대상을 먼저 선택 하세요')
-        }
-        if(cnt>0){
-            $("#billsaveForm").submit();
         }
     });
 });

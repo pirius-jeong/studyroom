@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load studyroom_filter %}
+{% load humanize %}
+{% block content %}
+
+<div class="container my-3">
+    <div>
+        <h1>
+            <span class="badge badge-info">청구 재발행</span>
+        </h1>
+    </div>
+    <hr class="my-3">
+
+    <div class="row">
+        <div class="col-xs-2">
+            <button class="btn " type="button" >이름</button>
+        </div>
+        <div class="col-xs-2">
+            <input id="input_search" type="text" class="form-control name" value="{{ name|default_if_none:'' }}">
+        </div>
+
+        <div class="col-xs-2">
+            <button class="btn btn-outline-secondary" type="button" id="btn_search">찾기</button>
+        </div>
+        <div class="col-xs-2" style="width:50px">
+        </div>
+
+            <div class="col-xs-2">
+                <button class="btn btn-secondary" type="button" id="btn_bill_save">청구 재발행</button>
+            </div>
+
+
+    </div>
+    <hr class="my-3">
+    <table class="table">
+        <thead>
+        <tr class="text-center thead-light">
+            <th></th>
+            <th>이름</th>
+            <th>청구월</th>
+            <th>청구금액</th>
+            <th>수납금액</th>
+            <th>수강료</th>
+            <th>환불금액</th>
+            <th>형제할인</th>
+            <th>추천할인</th>
+            <th>상태</th>
+        </tr>
+        </thead>
+        <tbody>
+        <form id="billsaveForm" method="post" action="{% url 'studyroom:bill_save' %}">
+        {% csrf_token %}
+        {% if bill_list %}
+        {% for bill in bill_list %}
+        <tr class="text-center">
+            <td>
+                <input type="checkbox" name="bill_id" value={{ bill.id }}>
+            </td>
+            <td>{{ bill.account.student.name }} {{ bill.account.student.brother.name }}</td>
+            <td>{{ bill.bill_mt|slice:"2:4" }}년 {{ bill.bill_mt|slice:"4:" }}월</td>
+            <td>{{ bill.bill_amt|intcomma }}</td>
+            <td>{{ bill.pay_amt|intcomma }}</td>
+            <td>{{ bill.base_amt|intcomma }} {% if bill.account.student.brother %}{{ bill.brother_base_amt|intcomma }}{% endif %}</td>
+            <td>{{ bill.refund_amt|intcomma }} {% if bill.account.student.brother %}{{ bill.brother_refund_amt|intcomma }}{% endif %}</td>
+            <td>{{ bill.brother_dc_amt|intcomma }}</td>
+            <td>{{ bill.recommend_dc_amt|intcomma }}</td>
+            <td>{{ bill.get_bill_status_display }}</td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td colspan="3">bill이 없습니다.</td>
+        </tr>
+        {% endif %}
+        </form>
+        </tbody>
+    </table>
+
+
+</div>
+
+
+
+<form id="searchForm" method="get" action="{% url 'studyroom:bill_save' %}">
+    <input type="hidden" id="name" name="name" value="{{ name|default_if_none:'' }}">
+</form>
+{% endblock %}
+{% block script %}
+<script type='text/javascript'>
+$(document).ready(function(){
+
+    $("#btn_search").on('click', function() {
+        $("#name").val($(".name").val());
+        $("#searchForm").submit();
+    });
+    $("#input_search").keydown(function(key) {
+        if (key.keyCode == 13) {
+            $("#name").val($(".name").val());
+            $("#searchForm").submit();
+    }});
+    $("input[name=bill_id]:checkbox").click(function(){
+        var cnt = $("input[name=bill_id]:checkbox:checked").length;
+        if(cnt>1){
+            alert('1개만 선택 가능합니다.')
+            $(this).prop('checked', false);
+        }
+    });
+    $("#btn_bill_save").on('click', function() {
+        var cnt = $("input[name=bill_id]:checkbox:checked").length;
+        if(cnt<1){
+            alert('청구 재발행 대상을 먼저 선택 하세요')
+        }
+        if(cnt>0){
+            $("#billsaveForm").submit();
+        }
+    });
+});
+</script>
+{% endblock %}
