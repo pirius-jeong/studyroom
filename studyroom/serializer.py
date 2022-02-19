@@ -11,5 +11,5 @@ class PostSerializer(serializers.ModelSerializer):
     pay_amt = serializers.IntegerField()
     payer = serializers.CharField()
     pay_status = serializers.CharField()
-    account = serializers.PrimaryKeyRelatedField()
+    account = serializers.PrimaryKeyRelatedField(queryset=Account.objects.all())
     create_date = serializers.DateTimeField()
