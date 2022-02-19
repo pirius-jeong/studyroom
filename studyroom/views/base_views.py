@@ -107,7 +107,7 @@ def hometax(request):
         serializer = PostSerializer(data = request.data)
 
         try:
-            account = Account.objects.filter(payer_phone_num__contains=serializer.payer)
+            account = Account.objects.filter(payer_phone_num__contains=serializer.payer).first()
             serializer.account = account
         except:
             print('=== Account is null ====')
