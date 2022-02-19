@@ -108,7 +108,7 @@ def hometax(request):
 
         try:
             serializer.account = Account.objects.get(payer_phone_num__contains=serializer.payer)
-       except Account.DoesNotExist:
+        except:
             serializer.account = None
             print('=== Account is null ====')
         serializer.create_date = timezone.now()
