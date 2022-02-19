@@ -13,12 +13,12 @@ except ImportError:
     flags = None
 
 SCOPES = 'https://www.googleapis.com/auth/drive.file'
-store = file.Storage('storage.json')
+store = file.Storage('/home/kizacademy/projects/mysite/storage.json')
 creds = store.get()
 
 if not creds or creds.invalid:
     print("make new storage data file ")
-    flow = client.flow_from_clientsecrets('client_secret.json', SCOPES)
+    flow = client.flow_from_clientsecrets('/home/kizacademy/projects/mysite/client_secret.json', SCOPES)
     creds = tools.run_flow(flow, store, flags) \
             if flags else tools.run(flow, store)
 
