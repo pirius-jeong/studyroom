@@ -28,10 +28,13 @@ class Command(BaseCommand):
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("lang=ko_KR")
         chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko")
+        print("webdriver.chrome start")
         driver = webdriver.Chrome(chrome_options=chrome_options)
+        print("webdriver.chrome end")
 
-
+        print("wait(30) start")
         driver.implicitly_wait(30)
+        print("wait(30) end")
         driver.set_window_position(0, 0)
         driver.set_window_size(1920, 1080)
         print("driver.get() start")
