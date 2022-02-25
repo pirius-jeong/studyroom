@@ -6,6 +6,7 @@ from studyroom.models import Bill, Account, Pay
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+import chromedriver_autoinstaller
 import time
 
 class Command(BaseCommand):
@@ -19,6 +20,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         tab = options['tab'][0]
+        chromedriver_autoinstaller.install()
         chrome_options = Options()
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--no-sandbox")
