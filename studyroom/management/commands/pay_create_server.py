@@ -20,7 +20,9 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         tab = options['tab'][0]
+        print("chromedriver_autoinstaller.install() start ")
         chromedriver_autoinstaller.install()
+        print("chromedriver_autoinstaller.install() end ")
         chrome_options = Options()
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--no-sandbox")
@@ -32,7 +34,9 @@ class Command(BaseCommand):
         driver.implicitly_wait(30)
         driver.set_window_position(0, 0)
         driver.set_window_size(1920, 1080)
+        print("driver.get() start")
         driver.get('https://www.hometax.go.kr/')
+        print("driver.get() end")
         time.sleep(30)
 
         print('# 로그인 메뉴 이동')
