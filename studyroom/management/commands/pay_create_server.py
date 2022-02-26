@@ -24,7 +24,7 @@ class Command(BaseCommand):
         print("chromedriver_autoinstaller.install() start ")
         chromedriver_autoinstaller.install()
         print("chromedriver_autoinstaller.install() end ")
-        display = Display(visible=0, size(1920,1080))
+        display = Display(visible=0)
         display.start()
         '''
         chrome_options = Options()
