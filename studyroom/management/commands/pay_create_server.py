@@ -32,7 +32,7 @@ class Command(BaseCommand):
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("lang=ko_KR")
         chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko")
-        path = '/home/mysite/projects/mysite'
+        path = '/home/mysite/projects/mysite/chromedriver'
         print("webdriver.chrome start")
         driver = webdriver.Chrome(path, chrome_options=chrome_options)
         print("webdriver.chrome end")
