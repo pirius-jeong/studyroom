@@ -26,7 +26,7 @@ class Command(BaseCommand):
         print("chromedriver_autoinstaller.install() end ")
         display = Display(visible=0)
         display.start()
-        '''
+
         chrome_options = Options()
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--no-sandbox")
@@ -39,7 +39,7 @@ class Command(BaseCommand):
         print("webdriver.chrome start")
         driver = webdriver.Chrome()
         print("webdriver.chrome end")
-
+        '''
         print("wait(30) start")
         driver.implicitly_wait(30)
         print("wait(30) end")
