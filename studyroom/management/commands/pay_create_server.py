@@ -7,6 +7,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 import chromedriver_autoinstaller
+from pyvirtualdisplay import Display
 import time
 
 class Command(BaseCommand):
@@ -23,6 +24,9 @@ class Command(BaseCommand):
         print("chromedriver_autoinstaller.install() start ")
         chromedriver_autoinstaller.install()
         print("chromedriver_autoinstaller.install() end ")
+        display = Dispaly(visible=0, size(1920,1080))
+        display.start()
+        '''
         chrome_options = Options()
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--no-sandbox")
@@ -30,6 +34,10 @@ class Command(BaseCommand):
         chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko")
         print("webdriver.chrome start")
         driver = webdriver.Chrome(chrome_options=chrome_options)
+        print("webdriver.chrome end")
+        '''
+        print("webdriver.chrome start")
+        driver = webdriver.Chrome()
         print("webdriver.chrome end")
 
         print("wait(30) start")
