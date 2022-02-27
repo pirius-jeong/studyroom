@@ -24,6 +24,7 @@ class Command(BaseCommand):
         display.start()
 
         path = '/home/ubuntu/projects/mysite/chromedriver'
+        print("============ pay_create ===========================================")
         print(datetime.today(), "webdriver.chrome start")
         driver = webdriver.Chrome(path)
         print(datetime.today(), "webdriver.chrome end")
@@ -73,15 +74,19 @@ class Command(BaseCommand):
 
         if tab == 1:
             # 일별 탭
+            print(datetime.today(), '# 일별 탭')
             driver.find_element(By.XPATH,'//*[@id="tabControl1_UTECRCB057_tab_tabs1"]/div[1]').click()
         elif tab == 2:
             # 주별 탭
+            print(datetime.today(), '# 주별 탭')
             driver.find_element(By.XPATH, '//*[@id="tabControl1_UTECRCB057_tab_tabs2"]/div[1]').click()
         elif tab == 3:
             # 월별 탭
+            print(datetime.today(), '# 월별 탭')
             driver.find_element(By.XPATH,'//*[@id="tabControl1_UTECRCB057_tab_tabs3"]/div[1]').click()
         elif tab == 4:
             # 분기별 탭
+            print(datetime.today(), '# 분기별 탭')
             driver.find_element(By.XPATH,'//*[@id="tabControl1_UTECRCB057_tab_tabs4"]/div[1]').click()
         time.sleep(10)
 

@@ -22,6 +22,8 @@ class Command(BaseCommand):
                                 and sa.payer_phone_num = sp.payer and sb.bill_amt = sp.pay_amt", \
                     con, index_col=None)
 
+        print("============ bill_pay ===========================================")
+
         for i in pay_list.index:
             pay_dt = pay_list.at[i, 'pay_dt'][-2:]
             pay_mt = pay_list.at[i, 'pay_dt'][4:6]
@@ -32,7 +34,7 @@ class Command(BaseCommand):
                 bill_mt = (date(int(pay_yt), int(pay_mt), int(pay_dt)) + relativedelta(months=1)).strftime("%Y%m")
 
             if pay_list.at[i, 'bill_mt'] == bill_mt:
-                print('bill_mt:', pay_list.iloc[i].bill_mt,'pay_dt:', pay_list.iloc[i].pay_dt,'pay_mt:', bill_mt, '==> Bill-Pay concatenated')
+                print(datetime.today(),'bill_mt:', pay_list.iloc[i].bill_mt,'pay_dt:', pay_list.iloc[i].pay_dt,'pay_mt:', bill_mt, '==> Bill-Pay concatenated')
 
                 bill = Bill.objects.get(pk=pay_list.at[i, 'bill_id'])
                 bill.pay_id = pay_list.at[i, 'pay_id']
@@ -47,4 +49,4 @@ class Command(BaseCommand):
                 pay.save()
 
             else:
-                print('bill_mt:', pay_list.iloc[i].bill_mt,'pay_dt:',pay_list.iloc[i].pay_dt,'pay_mt:', bill_mt, '==> Bill-Pay mismatch')
+                print(datetime.today(),'bill_mt:', pay_list.iloc[i].bill_mt,'pay_dt:',pay_list.iloc[i].pay_dt,'pay_mt:', bill_mt, '==> Bill-Pay mismatch')
