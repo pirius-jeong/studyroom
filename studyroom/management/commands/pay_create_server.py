@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
 from django.utils import timezone
+from datetime import datetime
 
 from studyroom.models import Bill, Account, Pay
 
@@ -22,50 +23,50 @@ class Command(BaseCommand):
         #display.start()
 
         path = '/home/ubuntu/projects/mysite/chromedriver'
-        print(timezone.now(), "webdriver.chrome start")
+        print(datetime.today(), "webdriver.chrome start")
         driver = webdriver.Chrome(path)
-        print(timezone.now(), "webdriver.chrome end")
+        print(datetime.today(), "webdriver.chrome end")
 
-        #print(timezone.now(), "wait(10) start")
+        #print(datetime.today(), "wait(10) start")
         driver.implicitly_wait(10)
-        #print(timezone.now(), "wait(10) end")
+        #print(datetime.today(), "wait(10) end")
         driver.set_window_position(0, 0)
         driver.set_window_size(1920, 1080)
-        print(timezone.now(), "driver.get() start")
+        print(datetime.today(), "driver.get() start")
         driver.get('https://www.hometax.go.kr/')
-        print(timezone.now(), "driver.get() end")
+        print(datetime.today(), "driver.get() end")
         time.sleep(10)
 
-        print(timezone.now(), '# 로그인 메뉴 이동')
+        print(datetime.today(), '# 로그인 메뉴 이동')
         driver.find_element(By.ID, 'textbox81212912').click()
-        time.sleep(20)
+        time.sleep(10)
 
-        print(timezone.now(), '# 본문 iframe 이동')
+        print(datetime.today(), '# 본문 iframe 이동')
         iframe = driver.find_element(By.XPATH, '//*[@id="txppIframe"]')
         driver.switch_to.frame(iframe)
-        time.sleep(20)
+        time.sleep(10)
 
-        print(timezone.now(), '# 아이디 로그인 탭 이동')
+        print(datetime.today(), '# 아이디 로그인 탭 이동')
         driver.find_element(By.XPATH, '//*[@id="group91882156"]').click()
-        time.sleep(20)
+        time.sleep(10)
 
-        print(timezone.now(), '# 아이디/비번 입력')
+        print(datetime.today(), '# 아이디/비번 입력')
         driver.find_element(By.XPATH, '//*[@id="iptUserId"]').send_keys('alrudsim')
         driver.find_element(By.XPATH, '//*[@id="iptUserPw"]').send_keys('#smk445566')
         driver.find_element(By.XPATH, '//*[@id="anchor25"]').click()
-        time.sleep(20)
+        time.sleep(10)
 
-        print(timezone.now(), '# 조회/발급 메뉴 이동')
+        print(datetime.today(), '# 조회/발급 메뉴 이동')
         driver.find_element(By.XPATH, '//*[@id="textbox81212923"]').click()
-        time.sleep(20)
+        time.sleep(10)
 
-        print(timezone.now(), '# 현금영수증조회 > 매출내역 조회')
+        print(datetime.today(), '# 현금영수증조회 > 매출내역 조회')
         iframe = driver.find_element(By.XPATH, '//*[@id="txppIframe"]')
         driver.switch_to.frame(iframe)
         driver.find_element(By.XPATH, '//*[@id="sub_a_0105010000"]').click()
-        time.sleep(20)
+        time.sleep(5)
         driver.find_element(By.XPATH, '//*[@id="sub_a_0105010600"]').click()
-        time.sleep(20)
+        time.sleep(5)
 
         if tab == 1:
             # 일별 탭
@@ -79,11 +80,11 @@ class Command(BaseCommand):
         elif tab == 4:
             # 분기별 탭
             driver.find_element(By.XPATH,'//*[@id="tabControl1_UTECRCB057_tab_tabs4"]/div[1]').click()
-        time.sleep(30)
+        time.sleep(10)
 
-        print(timezone.now(), '# 조회하기 클릭')
+        print(datetime.today(), '# 조회하기 클릭')
         driver.find_element(By.XPATH, '//*[@id="group1988"]').click()
-        time.sleep(20)
+        time.sleep(10)
 
         table = driver.find_element(By.XPATH, '//*[@id="grdCshpt_body_table"]/tbody')
         rows = int(driver.find_element(By.XPATH, '//*[@id="txtTotal"]').text)
