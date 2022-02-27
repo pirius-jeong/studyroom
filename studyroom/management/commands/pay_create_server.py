@@ -22,44 +22,44 @@ class Command(BaseCommand):
         #display.start()
 
         path = '/home/ubuntu/projects/mysite/chromedriver'
-        print("webdriver.chrome start")
+        print(timezone.now(), "webdriver.chrome start")
         driver = webdriver.Chrome(path)
-        print("webdriver.chrome end")
+        print(timezone.now(), "webdriver.chrome end")
 
-        print("wait(10) start")
+        #print(timezone.now(), "wait(10) start")
         driver.implicitly_wait(10)
-        print("wait(10) end")
+        #print(timezone.now(), "wait(10) end")
         driver.set_window_position(0, 0)
         driver.set_window_size(1920, 1080)
-        print("driver.get() start")
+        print(timezone.now(), "driver.get() start")
         driver.get('https://www.hometax.go.kr/')
-        print("driver.get() end")
+        print(timezone.now(), "driver.get() end")
         time.sleep(10)
 
-        print('# 로그인 메뉴 이동')
+        print(timezone.now(), '# 로그인 메뉴 이동')
         driver.find_element(By.ID, 'textbox81212912').click()
         time.sleep(20)
 
-        print('# 본문 iframe 이동')
+        print(timezone.now(), '# 본문 iframe 이동')
         iframe = driver.find_element(By.XPATH, '//*[@id="txppIframe"]')
         driver.switch_to.frame(iframe)
         time.sleep(20)
 
-        print('# 아이디 로그인 탭 이동')
+        print(timezone.now(), '# 아이디 로그인 탭 이동')
         driver.find_element(By.XPATH, '//*[@id="group91882156"]').click()
         time.sleep(20)
 
-        print('# 아이디/비번 입력')
+        print(timezone.now(), '# 아이디/비번 입력')
         driver.find_element(By.XPATH, '//*[@id="iptUserId"]').send_keys('alrudsim')
         driver.find_element(By.XPATH, '//*[@id="iptUserPw"]').send_keys('#smk445566')
         driver.find_element(By.XPATH, '//*[@id="anchor25"]').click()
         time.sleep(20)
 
-        print('# 조회/발급 메뉴 이동')
+        print(timezone.now(), '# 조회/발급 메뉴 이동')
         driver.find_element(By.XPATH, '//*[@id="textbox81212923"]').click()
         time.sleep(20)
 
-        print('# 현금영수증조회 > 매출내역 조회')
+        print(timezone.now(), '# 현금영수증조회 > 매출내역 조회')
         iframe = driver.find_element(By.XPATH, '//*[@id="txppIframe"]')
         driver.switch_to.frame(iframe)
         driver.find_element(By.XPATH, '//*[@id="sub_a_0105010000"]').click()
@@ -81,7 +81,7 @@ class Command(BaseCommand):
             driver.find_element(By.XPATH,'//*[@id="tabControl1_UTECRCB057_tab_tabs4"]/div[1]').click()
         time.sleep(30)
 
-        print('# 조회하기 클릭')
+        print(timezone.now(), '# 조회하기 클릭')
         driver.find_element(By.XPATH, '//*[@id="group1988"]').click()
         time.sleep(20)
 
