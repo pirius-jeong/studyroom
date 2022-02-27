@@ -68,7 +68,7 @@ class Command(BaseCommand):
         driver.find_element(By.XPATH, '//*[@id="sub_a_0105010000"]').click()
         time.sleep(5)
         driver.find_element(By.XPATH, '//*[@id="sub_a_0105010600"]').click()
-        time.sleep(5)
+        time.sleep(20)
 
         if tab == 1:
             # 일별 탭
