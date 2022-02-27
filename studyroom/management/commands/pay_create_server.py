@@ -4,7 +4,7 @@ from django.utils import timezone
 from studyroom.models import Bill, Account, Pay
 
 from selenium import webdriver
-from pyvirtualdisplay import Display
+#from pyvirtualdisplay import Display
 import time
 
 class Command(BaseCommand):
@@ -18,10 +18,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         tab = options['tab'][0]
-        display = Display(visible=0)
-        display.start()
+        #display = Display(visible=0)
+        #display.start()
 
-        path = '/home/mysite/projects/mysite/chromedriver'
+        path = '/home/ubuntu/projects/mysite/chromedriver'
         print("webdriver.chrome start")
         driver = webdriver.Chrome(path)
         print("webdriver.chrome end")
