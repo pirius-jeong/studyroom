@@ -4,9 +4,6 @@ from django.utils import timezone
 from studyroom.models import Bill, Account, Pay
 
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-import chromedriver_autoinstaller
 from pyvirtualdisplay import Display
 import time
 
@@ -21,66 +18,54 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         tab = options['tab'][0]
-        print("chromedriver_autoinstaller.install() start ")
-        chromedriver_autoinstaller.install()
-        print("chromedriver_autoinstaller.install() end ")
         display = Display(visible=0)
         display.start()
 
-        chrome_options = Options()
-        chrome_options.add_argument("--headless")
-        chrome_options.add_argument("--no-sandbox")
-        chrome_options.add_argument("lang=ko_KR")
-        chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko")
         path = '/home/mysite/projects/mysite/chromedriver'
         print("webdriver.chrome start")
-        driver = webdriver.Chrome(path, chrome_options=chrome_options)
+        driver = webdriver.Chrome(path)
         print("webdriver.chrome end")
-        '''
-        print("webdriver.chrome start")
-        driver = webdriver.Chrome()
-        print("webdriver.chrome end")
-        '''
-        print("wait(30) start")
-        driver.implicitly_wait(30)
-        print("wait(30) end")
+
+        print("wait(10) start")
+        driver.implicitly_wait(10)
+        print("wait(10) end")
         driver.set_window_position(0, 0)
         driver.set_window_size(1920, 1080)
         print("driver.get() start")
         driver.get('https://www.hometax.go.kr/')
         print("driver.get() end")
-        time.sleep(30)
+        time.sleep(10)
 
         print('# 로그인 메뉴 이동')
         driver.find_element(By.ID, 'textbox81212912').click()
-        time.sleep(60)
+        time.sleep(20)
 
         print('# 본문 iframe 이동')
         iframe = driver.find_element(By.XPATH, '//*[@id="txppIframe"]')
         driver.switch_to.frame(iframe)
-        time.sleep(60)
+        time.sleep(20)
 
         print('# 아이디 로그인 탭 이동')
         driver.find_element(By.XPATH, '//*[@id="group91882156"]').click()
-        time.sleep(60)
+        time.sleep(20)
 
         print('# 아이디/비번 입력')
         driver.find_element(By.XPATH, '//*[@id="iptUserId"]').send_keys('alrudsim')
         driver.find_element(By.XPATH, '//*[@id="iptUserPw"]').send_keys('#smk445566')
         driver.find_element(By.XPATH, '//*[@id="anchor25"]').click()
-        time.sleep(40)
+        time.sleep(20)
 
         print('# 조회/발급 메뉴 이동')
         driver.find_element(By.XPATH, '//*[@id="textbox81212923"]').click()
-        time.sleep(40)
+        time.sleep(20)
 
         print('# 현금영수증조회 > 매출내역 조회')
         iframe = driver.find_element(By.XPATH, '//*[@id="txppIframe"]')
         driver.switch_to.frame(iframe)
         driver.find_element(By.XPATH, '//*[@id="sub_a_0105010000"]').click()
-        time.sleep(40)
+        time.sleep(20)
         driver.find_element(By.XPATH, '//*[@id="sub_a_0105010600"]').click()
-        time.sleep(40)
+        time.sleep(20)
 
         if tab == 1:
             # 일별 탭
@@ -98,7 +83,7 @@ class Command(BaseCommand):
 
         print('# 조회하기 클릭')
         driver.find_element(By.XPATH, '//*[@id="group1988"]').click()
-        time.sleep(30)
+        time.sleep(20)
 
         table = driver.find_element(By.XPATH, '//*[@id="grdCshpt_body_table"]/tbody')
         rows = int(driver.find_element(By.XPATH, '//*[@id="txtTotal"]').text)
