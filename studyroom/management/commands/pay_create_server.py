@@ -6,6 +6,7 @@ from studyroom.models import Bill, Account, Pay
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from pyvirtualdisplay import Display
 import time
 
 class Command(BaseCommand):
@@ -19,8 +20,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         tab = options['tab'][0]
-        #display = Display(visible=0)
-        #display.start()
+        display = Display(visible=0)
+        display.start()
 
         path = '/home/ubuntu/projects/mysite/chromedriver'
         print(datetime.today(), "webdriver.chrome start")
