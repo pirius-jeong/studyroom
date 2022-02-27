@@ -62,7 +62,9 @@ class Command(BaseCommand):
 
         print(datetime.today(), '# 현금영수증조회 > 매출내역 조회')
         iframe = driver.find_element(By.XPATH, '//*[@id="txppIframe"]')
+        time.sleep(5)
         driver.switch_to.frame(iframe)
+        time.sleep(5)
         driver.find_element(By.XPATH, '//*[@id="sub_a_0105010000"]').click()
         time.sleep(5)
         driver.find_element(By.XPATH, '//*[@id="sub_a_0105010600"]').click()
