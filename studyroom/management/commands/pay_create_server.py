@@ -4,7 +4,7 @@ from django.utils import timezone
 from studyroom.models import Bill, Account, Pay
 
 from selenium import webdriver
-#from pyvirtualdisplay import Display
+from selenium.webdriver.common.by import By
 import time
 
 class Command(BaseCommand):
