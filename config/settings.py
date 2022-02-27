@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'rest_framework',
+    'django_crontab',
 ]
 
 MIDDLEWARE = [
@@ -188,3 +189,7 @@ LOGGING = {
         },
     }
 }
+
+CRONJOBS = [
+    ('* * * * *', 'app.cron.hello_every_minute', '>> /tmp/log/ggbc_cron.log'),
+]
