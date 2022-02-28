@@ -27,9 +27,12 @@ class Command(BaseCommand):
                 account = Account.objects.get(payer_phone_num__contains=payer)
                 pay = pay.objects.get(id=id)
                 pay.account = account
-            finally:
                 pay.save()
                 cnt = cnt + 1
+            except:
+                continue
+
+
 
         print(datetime.today(), cnt, "건 pay.account updated")
 
