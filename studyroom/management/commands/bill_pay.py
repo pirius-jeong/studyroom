@@ -17,6 +17,7 @@ class Command(BaseCommand):
         payer_list = pd.read_sql("select id, payer from studyroom_pay where account_id is null", con, index_col=None)
 
         print("============ payer_update ===========================================")
+        print(payer_list.head())
         cnt = 0
 
         for i in payer_list.index:
