@@ -11,8 +11,31 @@ from studyroom.models import Bill, Pay
 class Command(BaseCommand):
     help = 'bill, pay concatenate'
 
+    def payer_update():
+        con = sqlite3.connect("db.sqlite3")
+        payer_list = pd.read_sel("select id, payer from studyroom_pay where accout_id is null", con, index_col=None)
+
+        print("============ bill_pay ===========================================")
+        cnt = 0
+
+        for i in payer_list.index:
+            id = payer_list.at[i, id]
+            payer = payer_list.at[i, payer]
+            try:
+                account = Account.objects.get(payer_phone_num__contains=payer)
+                pay = pay.objects.get(id=id)
+                pay.account = account
+            finally:
+                pay.save()
+                cnt = cnt + 1
+
+        print(datetime.today(), cnt,"건 pay.account updated")
+
+
     def handle(self, *args, **options):
 
+        payer_update()
+        
         con = sqlite3.connect("db.sqlite3")
 
         pay_list = pd.read_sql("select sb.id as bill_id, sb.bill_mt, sp.id as pay_id, sp.pay_amt , substr(sp.pay_date ,1,8) as pay_dt \
