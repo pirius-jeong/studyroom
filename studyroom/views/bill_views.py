@@ -29,7 +29,7 @@ def bill_dml(bill_id=''):
     bill_list = pd.read_sql("\
                                     select * \
                                     from studyroom_bill \
-                                    where id = %d" % (bill_id), con, index_col=None)
+                                    where id = %s" % (bill_id), con, index_col=None)
     print(bill_list)
 
 
