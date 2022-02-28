@@ -14,15 +14,15 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         con = sqlite3.connect("db.sqlite3")
 
-        payer_list = pd.read_sql("select id, payer from studyroom_pay where account_id is null", con, index_col=None)
+        payer_list = pd.read_sql("select id as pay_id, payer as pay_payer from studyroom_pay where account_id is null", con, index_col=None)
 
         print("============ payer_update ===========================================")
         print(payer_list.head())
         cnt = 0
 
         for i in payer_list.index:
-            id = payer_list.at[i, id]
-            payer = payer_list.at[i, payer]
+            id = payer_list.at[i, pay_id]
+            payer = payer_list.at[i, pay_payer]
             try:
                 account = Account.objects.get(payer_phone_num__contains=payer)
                 pay = pay.objects.get(id=id)
