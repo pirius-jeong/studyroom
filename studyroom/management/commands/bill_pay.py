@@ -6,16 +6,17 @@ from datetime import datetime
 from datetime import date
 from dateutil.relativedelta import relativedelta
 
-from studyroom.models import Bill, Pay
+from studyroom.models import Bill, Pay, Account
 
 class Command(BaseCommand):
     help = 'bill, pay concatenate'
 
-    def payer_update():
+    def handle(self, *args, **options):
         con = sqlite3.connect("db.sqlite3")
+
         payer_list = pd.read_sel("select id, payer from studyroom_pay where accout_id is null", con, index_col=None)
 
-        print("============ bill_pay ===========================================")
+        print("============ payer_update ===========================================")
         cnt = 0
 
         for i in payer_list.index:
@@ -29,14 +30,7 @@ class Command(BaseCommand):
                 pay.save()
                 cnt = cnt + 1
 
-        print(datetime.today(), cnt,"건 pay.account updated")
-
-
-    def handle(self, *args, **options):
-
-        payer_update()
-        
-        con = sqlite3.connect("db.sqlite3")
+        print(datetime.today(), cnt, "건 pay.account updated")
 
         pay_list = pd.read_sql("select sb.id as bill_id, sb.bill_mt, sp.id as pay_id, sp.pay_amt , substr(sp.pay_date ,1,8) as pay_dt \
                                 from studyroom_bill sb, studyroom_pay sp, studyroom_account sa \
