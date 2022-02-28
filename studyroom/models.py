@@ -122,8 +122,10 @@ class Bill(models.Model):
         김포페이 = 'KP'
         계좌이체 = 'AT'
 
+    '''    
     def __str__(self):
         return (self.account.student.name, self.bill_mt)
+    '''
 
     account = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True)
     bill_status = models.CharField(max_length=2, choices=BillStatus_choices)
@@ -169,7 +171,8 @@ class Pay(models.Model):
 class Absence(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     student = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True)
-    absence_dt = models.CharField(max_length=8, default='yyyymmdd')
+    absence_mt = models.CharField(max_length=6, default='yyyymm')
+    absence_days = models.IntegerField(default=0)
     absence_detail = models.CharField(max_length=60,default='결석사유:')
     create_date = models.DateTimeField()
     modify_date = models.DateTimeField(auto_now=True)

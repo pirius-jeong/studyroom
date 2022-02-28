@@ -49,11 +49,11 @@ class SugangForm(forms.ModelForm):
 class AbsenceForm(forms.ModelForm):
     class Meta:
         model = Absence  # 사용할 모델
-        fields = ['student', 'absence_dt', 'absence_detail']
+        fields = [ 'absence_mt', 'absence_days', 'absence_detail']
         # SugangForm에서 사용할 Sugang 모델의 속성
 
         labels = {
-            'student': '학생',
-            'absence_dt': '결석일',
+            'absence_mt': '결석월',
+            'absence_days': '결석일수',
             'absence_detail': '결석사유',
         }

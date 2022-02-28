@@ -7,6 +7,14 @@
             <span class="badge badge-info">결석 등록/변경</span>
         </h1>
     </div>
+    <div>
+        <table class="table table-hover">
+            <tr>
+                <th><label >학생:</label></th>
+                <td>{{student_name}}</td>
+            </tr>
+        </table>
+    </div>
     <form method="post" class="post-form my-3">
         {% csrf_token %}
         <!-- 오류표시 Start -->

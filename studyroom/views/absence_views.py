@@ -25,7 +25,7 @@ def absence_create(request, student_id):
             return redirect('studyroom:detail', student_id=student.id)
     else:
         form = AbsenceForm()
-    context = {'student': student, 'form': form}
+    context = {'student': student, 'form': form, 'student_name':student.name}
     return render(request, 'studyroom/absence_form.html', context)
 
 @login_required(login_url='common:login')

@@ -194,7 +194,7 @@
         {% for absence in student.absence_set.all %}
             <div>
                 <h5>
-                    {{ absence.absence_dt }}
+                    {{ absence.absence_mt }}월 : 결석일수 {{ absence.absence_days }}일
                     <a href="#" class="absence_delete btn btn-secondary"
             data-uri="{% url 'studyroom:absence_delete' absence.id  %}">삭제</a>
                 </h5>

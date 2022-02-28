@@ -55,7 +55,7 @@ def bill_dml(bill_id=''):
                                     where a.student_id = s.id and s.brother_id is not null", con, index_col=None)
 
     refund_amt_list = pd.read_sql("\
-                                    select ac.id, p.refund*count(1) as refund_amt  from \
+                                    select ac.id, p.refund * ab.absence_days as refund_amt  from \
                                     (select student_id,\'d\'||count(1) as sugang_type \
                                     from studyroom_sugang \
                                     where %s between start_mt and end_mt \
@@ -66,12 +66,12 @@ def bill_dml(bill_id=''):
                                     and %s between p.start_mt and p.end_mt \
                                     and a.student_id = ac.student_id \
                                     and ac.student_id = ab.student_id \
-                                    and ab.absence_dt between %s and %s \
-                                    group by ac.id" % (absence_mt, absence_mt, absence_fr, absence_to), con,
+                                    and ab.absence_mt = %s \
+                                    group by ac.id" % (absence_mt, absence_mt, absence_mt), con,
                                   index_col=None)
 
     brother_refund_amt_list = pd.read_sql("\
-                                    select ac.id, p.refund*count(1) as brother_refund_amt  from \
+                                    select ac.id, p.refund * ab.absence_days as brother_refund_amt  from \
                                     (select student_id,\'d\'||count(1) as sugang_type \
                                     from studyroom_sugang \
                                     where %s between start_mt and end_mt \
@@ -83,8 +83,8 @@ def bill_dml(bill_id=''):
                                     and a.student_id = ac.student_id \
                                     and c.brother_id = ab.student_id \
                                     and ac.student_id = c.id \
-                                    and ab.absence_dt between %s and %s \
-                                    group by ac.id" % (absence_mt, absence_mt, absence_fr, absence_to), con,
+                                    and ab.absence_mt = %s \
+                                    group by ac.id" % (absence_mt, absence_mt, absence_mt), con,
                                           index_col=None)
 
     merge1 = pd.merge(base_amt_list, brother_base_amt_list, how='outer', on='id')
