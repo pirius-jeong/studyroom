@@ -21,8 +21,8 @@ class Command(BaseCommand):
         cnt = 0
 
         for i in payer_list.index:
-            id = payer_list.at[i, pay_id]
-            payer = payer_list.at[i, pay_payer]
+            id = payer_list.at[i, 'pay_id']
+            payer = payer_list.at[i, 'pay_payer']
             try:
                 account = Account.objects.get(payer_phone_num__contains=payer)
                 pay = pay.objects.get(id=id)
