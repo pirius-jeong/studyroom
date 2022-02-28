@@ -14,7 +14,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         con = sqlite3.connect("db.sqlite3")
 
-        payer_list = pd.read_sel("select id, payer from studyroom_pay where accout_id is null", con, index_col=None)
+        payer_list = pd.read_sql("select id, payer from studyroom_pay where account_id is null", con, index_col=None)
 
         print("============ payer_update ===========================================")
         cnt = 0
