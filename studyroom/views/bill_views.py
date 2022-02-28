@@ -252,7 +252,7 @@ def bill_save(request):
     if request.method == 'POST':
         bill_id = request.POST.get('bill_id', '')
         print('== 청구 재발행:', bill_id)
-        bill_dml(bill_id)
+        #bill_dml(bill_id)
         return redirect('studyroom:bill_list')
     else:
         # 조회
