@@ -24,7 +24,7 @@ class Command(BaseCommand):
         display.start()
 
         path = '/home/ubuntu/projects/mysite/chromedriver'
-        print("============ pay_create ===========================================")
+        print("============ pay_create start ===========================================")
         print(datetime.today(), "webdriver.chrome start")
         driver = webdriver.Chrome(path)
         print(datetime.today(), "webdriver.chrome end")
@@ -127,3 +127,5 @@ class Command(BaseCommand):
                 break
             driver.find_element(By.XPATH, page % str(i + 2)).click()
             time.sleep(3)
+
+        print("============ pay_create end ===========================================")
