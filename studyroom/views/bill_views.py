@@ -19,7 +19,7 @@ logger = logging.getLogger('studyroom')
 
 
 def bill_dml(bill_id=''):
-    con = sqlite3.connect("db.sqlite3")
+    con = sqlite3.connect("./db.sqlite3")
 
     if bill_id != '':  # 청구서 재발행
         print('=== bill-id:', bill_id, '청구서 재발행')
