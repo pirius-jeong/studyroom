@@ -34,6 +34,40 @@ def bill_dml(bill_id):
                                             where %s between start_mt and end_mt \
                                             and student_id = %s", [bill_mt, student.id])[0]
     print("수강Type:", s.sugang_type)
+
+    brother_base_amt = 0
+    brother_refund_amt = 0
+    brother_dc_amt = 0
+
+    sp = PricePlan.objects.raw("select id, price from studyroom_priceplan \
+                                        where grade = %s and sugang_type = %s \
+                                        and %s between start_mt and end_mt", [student.grade, s.sugang_type, bill_mt])[0]
+    base_amt = sp.price
+    print("수강료:", base_amt)
+
+    srp = PricePlan.objects.raw("select id, refund from studyroom_priceplan \
+                                                        where grade = %s and sugang_type = %s \
+                                                        and %s between start_mt and end_mt",
+                                [student.grade, s.sugang_type, absence_mt])[0]
+    print("환불기준:", srp.refund)
+
+    sa = Absence.objects.raw("select id, absence_days from studyroom_absence \
+                                                where student_id = %s and absence_mt = %s", [student.id, absence_mt])
+    if len(sa) == 0:
+        absence_days = 0
+    else:
+        absence_days = sa[0].absence_days
+    refund_amt = absence_days * srp.refund
+    print("환불금:", refund_amt)
+
+    r = Account.objects.raw("select id, -10000 as recommend_dc_amt from studyroom_account \
+                                    where %s between recommend_dc_start and recommend_dc_end \
+                                    and id = %s", [bill_mt, account.id])
+    if len(r) == 0:
+        recommend_dc_amt = 0
+    else:
+        recommend_dc_amt = r.recommend_dc_amt
+    print("추천할인:", recommend_dc_amt)
     if student.brother_id :
         print("이름:", student.name, "형제:", student.brother.name)
         b = Sugang.objects.raw("select id,\'d\'||count(1) as sugang_type from studyroom_sugang \
@@ -61,43 +95,12 @@ def bill_dml(bill_id):
             brother_absence_days = ba[0].absence_days
         brother_refund_amt = brother_absence_days * brp.refund
         print("형제환불금:", brother_refund_amt)
-    else:
-        brother_base_amt = 0
-        brother_refund_amt = 0
 
+        brother_dc_amt = (base_amt + brother_base_amt + refund_amt + brother_refund_amt) * -0.1
 
-    sp = PricePlan.objects.raw("select id, price from studyroom_priceplan \
-                                where grade = %s and sugang_type = %s \
-                                and %s between start_mt and end_mt", [student.grade, s.sugang_type, bill_mt])[0]
-    base_amt = sp.price
-    print("수강료:", base_amt)
-
-    srp = PricePlan.objects.raw("select id, refund from studyroom_priceplan \
-                                                where grade = %s and sugang_type = %s \
-                                                and %s between start_mt and end_mt",
-                                [student.grade, s.sugang_type, absence_mt])[0]
-    print("환불기준:", srp.refund)
-
-    sa = Absence.objects.raw("select id, absence_days from studyroom_absence \
-                                        where student_id = %s and absence_mt = %s", [student.id, absence_mt])
-    if len(sa) == 0:
-        absence_days = 0
-    else:
-        absence_days = sa[0].absence_days
-    refund_amt = absence_days * srp.refund
-    print("환불금:", refund_amt)
-
-    r = Account.objects.raw("select id, -10000 as recommend_dc_amt from studyroom_account \
-                            where %s between recommend_dc_start and recommend_dc_end \
-                            and id = %s", [bill_mt, account.id])
-    if len(r) == 0:
-        recommend_dc_amt = 0
-    else:
-        recommend_dc_amt = r.recommend_dc_amt
-    print("추천할인:", recommend_dc_amt)
 
     bill_status = 'OP'
-    brother_dc_amt = (base_amt + brother_base_amt + refund_amt + brother_refund_amt) * -0.1
+
     bill_amt = base_amt + brother_base_amt + refund_amt + brother_refund_amt + brother_dc_amt + recommend_dc_amt
     bill.bill_status = bill_status
     bill.bill_amt = bill_amt
